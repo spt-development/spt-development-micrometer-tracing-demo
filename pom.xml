@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.spt-development</groupId>
+	<artifactId>spt-development-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>spt-development-demo</name>
+	<description>Demo project for SPT Development projects</description>
+
+	<properties>
+		<java.version>16</java.version>
+
+		<!-- Dependency versions -->
+		<spt-development-audit-spring-boot.version>2.0.0</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>2.0.0</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>2.0.0</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>2.0.0</spt-development-logging-spring-boot.version>
+
+		<!-- Test dependency versions -->
+		<spt-development-test.version>2.0.0</spt-development-test.version>
+	</properties>
+
+	<dependencies>
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jdbc</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- Spring third-party dependencies -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- SPT dependencies -->
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-audit-spring-boot-starter</artifactId>
+			<version>${spt-development-audit-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-cid-jms-spring-boot-starter</artifactId>
+			<version>${spt-development-cid-jms-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-cid-web-spring-boot-starter</artifactId>
+			<version>${spt-development-cid-web-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-logging-spring-boot-starter</artifactId>
+			<version>${spt-development-logging-spring-boot.version}</version>
+		</dependency>
+
+		<!-- Spring test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- SPT test dependencies -->
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-test</artifactId>
+			<version>${spt-development-test.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
