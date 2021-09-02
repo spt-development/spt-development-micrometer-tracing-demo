@@ -1,13 +1,13 @@
-package com.sptdevelopment.sptdevelopmentdemo;
+package com.spt.development.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SptDevelopmentDemoApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SptDevelopmentDemoApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
