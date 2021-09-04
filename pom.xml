@@ -39,6 +39,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-artemis</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 			<!-- Version defined in parent dependencyManagement section -->
 		</dependency>
@@ -62,6 +67,12 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>artemis-jms-server</artifactId>
 			<scope>runtime</scope>
 			<!-- Version defined in parent dependencyManagement section -->
 		</dependency>

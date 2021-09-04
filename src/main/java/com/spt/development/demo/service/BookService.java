@@ -6,6 +6,7 @@ import com.spt.development.demo.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import static com.spt.development.demo.util.Constants.Auditing;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
