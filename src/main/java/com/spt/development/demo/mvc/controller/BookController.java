@@ -38,10 +38,7 @@ public class BookController {
 
     @PutMapping("/{id:\\d+}")
     public ResponseEntity<Book> update(@PathVariable long id, @RequestBody Book book) {
-        if (id != book.id()) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.of(bookService.update(book));
+        return ResponseEntity.of(bookService.update(id, book));
     }
 
     @DeleteMapping("/{id:\\d+}")

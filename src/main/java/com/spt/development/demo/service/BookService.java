@@ -15,7 +15,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public Book create(@NonNull Book book) {
-        return bookRepository.create(book);
+        return bookRepository.create(book.toBuilder().id(null).build());
     }
 
     public Optional<Book> read(long id) {
@@ -26,8 +26,8 @@ public class BookService {
         return bookRepository.readAll();
     }
 
-    public Optional<Book> update(@NonNull Book book) {
-        return bookRepository.update(book);
+    public Optional<Book> update(long id, @NonNull Book book) {
+        return bookRepository.update(book.toBuilder().id(id).build());
     }
 
     public void delete(long id) {

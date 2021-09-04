@@ -27,6 +27,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
+                .csrf()
+                    .disable()
                 .formLogin()
                     .disable()
                 .sessionManagement()

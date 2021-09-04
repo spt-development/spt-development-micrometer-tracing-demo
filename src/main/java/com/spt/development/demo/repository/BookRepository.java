@@ -38,7 +38,7 @@ public class BookRepository extends JdbcDaoSupport {
 
     public Book create(@NonNull Book book) {
         final Number id = simpleJdbcInsert.executeAndReturnKey(book.toParameterMap());
-        return new Book(id.longValue(), book.title(), book.blurb(), book.author(), book.rrp());
+        return book.toBuilder().id(id.longValue()).build();
     }
 
     public Optional<Book> read(long id) {
@@ -65,12 +65,12 @@ public class BookRepository extends JdbcDaoSupport {
 
     public Optional<Book> update(@NonNull Book book) {
         final int rows = getJdbcTemplate().update(
-                "UPDATE demo.book SET title = ?, blurb = ?, author = ?, rrp = ?, version = ? + 1 WHERE book_id = ? AND version = ?",
-                book.id(),
+                "UPDATE demo.book SET title = ?, blurb = ?, author = ?, rrp = ? WHERE book_id = ?",
                 book.title(),
                 book.blurb(),
                 book.author(),
-                book.rrp()
+                book.rrp(),
+                book.id()
         );
 
         if (rows == 0) {
