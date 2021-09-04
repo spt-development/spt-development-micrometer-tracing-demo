@@ -1,5 +1,6 @@
 package com.spt.development.demo.service;
 
+import com.spt.development.audit.spring.Audited;
 import com.spt.development.demo.domain.Book;
 import com.spt.development.demo.repository.BookRepository;
 import lombok.AllArgsConstructor;
@@ -9,12 +10,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.spt.development.demo.util.Constants.Auditing;
+
 @Service
 @AllArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
 
-    public Book create(@NonNull Book book) {
+    @Audited(type = Auditing.Type.BOOK, subType = Auditing.SubType.CREATED)
+    public @Audited.Id("id") Book create(@NonNull @Audited.Detail Book book) {
         return bookRepository.create(book.toBuilder().id(null).build());
     }
 
@@ -26,11 +30,13 @@ public class BookService {
         return bookRepository.readAll();
     }
 
-    public Optional<Book> update(long id, @NonNull Book book) {
+    @Audited(type = Auditing.Type.BOOK, subType = Auditing.SubType.UPDATED)
+    public Optional<Book> update(@Audited.Id long id, @NonNull @Audited.Detail Book book) {
         return bookRepository.update(book.toBuilder().id(id).build());
     }
 
-    public void delete(long id) {
+    @Audited(type = Auditing.Type.BOOK, subType = Auditing.SubType.DELETED)
+    public void delete(@Audited.Id long id) {
         bookRepository.delete(id);
     }
 }
