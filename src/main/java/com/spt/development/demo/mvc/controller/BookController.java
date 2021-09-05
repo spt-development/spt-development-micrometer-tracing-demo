@@ -3,6 +3,7 @@ package com.spt.development.demo.mvc.controller;
 import com.spt.development.demo.domain.Book;
 import com.spt.development.demo.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<Book> create(@RequestBody Book book) {
-        return ResponseEntity.ok(bookService.create(book));
+        return new ResponseEntity<>(bookService.create(book), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id:\\d+}")
