@@ -13,3 +13,6 @@ spt:
   audit:
     jms:
       destination: jms.queue.audit-event-queue
+  cid:
+    web:
+      use-request-header: true

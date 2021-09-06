@@ -27,7 +27,15 @@
 		<spt-development-logging-spring-boot.version>2.0.0</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
+		<awaitility.version>4.1.0</awaitility.version>
+		<cucumber.version>6.11.0</cucumber.version>
 		<spt-development-test.version>2.0.0</spt-development-test.version>
+
+		<!-- Plugin versions -->
+		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
+
+		<!-- Plugin dependencies -->
+		<checkstyle.version>8.45.1</checkstyle.version>
 	</properties>
 
 	<dependencies>
@@ -114,10 +122,114 @@
 			<version>${spt-development-test.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Third-party test dependencies -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-core</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>${awaitility.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle-maven-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>spt_checks.xml</configLocation>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<disableXmlReport>true</disableXmlReport>
+					<trimStackTrace>false</trimStackTrace>
+					<!--
+                         classesDirectory is required to work around a bug that is discussed at
+                         https://github.com/spring-projects/spring-boot/issues/6254. There are a number of different
+                         workarounds, but this seems to be the cleanest.
+                      -->
+					<classesDirectory>${project.build.outputDirectory}</classesDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -129,6 +241,7 @@
                         </goals>
                     </execution>
                 </executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
             </plugin>
 		</plugins>
 	</build>
