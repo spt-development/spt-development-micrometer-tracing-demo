@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.spt-development</groupId>
+	<artifactId>spt-development-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>spt-development-demo</name>
+	<description>Demo project for SPT Development projects</description>
+
+	<properties>
+		<java.version>16</java.version>
+
+		<!-- Dependency versions -->
+		<spt-development-audit-spring-boot.version>2.0.0</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>2.0.0</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>2.0.0</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>2.0.0</spt-development-logging-spring-boot.version>
+
+		<!-- Test dependency versions -->
+		<awaitility.version>4.1.0</awaitility.version>
+		<cucumber.version>6.11.0</cucumber.version>
+		<spt-development-test.version>2.0.0</spt-development-test.version>
+
+		<!-- Plugin versions -->
+		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
+
+		<!-- Plugin dependencies -->
+		<checkstyle.version>8.45.1</checkstyle.version>
+	</properties>
+
+	<dependencies>
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-artemis</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- Spring third-party dependencies -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>artemis-jms-server</artifactId>
+			<scope>runtime</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- SPT dependencies -->
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-audit-spring-boot-starter</artifactId>
+			<version>${spt-development-audit-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-cid-jms-spring-boot-starter</artifactId>
+			<version>${spt-development-cid-jms-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-cid-web-spring-boot-starter</artifactId>
+			<version>${spt-development-cid-web-spring-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-logging-spring-boot-starter</artifactId>
+			<version>${spt-development-logging-spring-boot.version}</version>
+		</dependency>
+
+		<!-- Spring test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+
+		<!-- SPT test dependencies -->
+		<dependency>
+			<groupId>com.spt-development</groupId>
+			<artifactId>spt-development-test</artifactId>
+			<version>${spt-development-test.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Third-party test dependencies -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-core</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>${awaitility.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle-maven-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>spt_checks.xml</configLocation>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<disableXmlReport>true</disableXmlReport>
+					<trimStackTrace>false</trimStackTrace>
+					<!--
+                         classesDirectory is required to work around a bug that is discussed at
+                         https://github.com/spring-projects/spring-boot/issues/6254. There are a number of different
+                         workarounds, but this seems to be the cleanest.
+                      -->
+					<classesDirectory>${project.build.outputDirectory}</classesDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+            </plugin>
+		</plugins>
+	</build>
+
+</project>

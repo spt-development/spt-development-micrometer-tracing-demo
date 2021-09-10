@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: SPT Development Demo
+  artemis:
+    mode: embedded
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+
+spt:
+  audit:
+    jms:
+      destination: jms.queue.audit-event-queue
+  cid:
+    web:
+      use-request-header: true
