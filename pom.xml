@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.4</version>
+		<version>2.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -18,18 +18,18 @@
 	<description>Demo project for SPT Development projects</description>
 
 	<properties>
-		<java.version>16</java.version>
+		<java.version>17</java.version>
 
 		<!-- Dependency versions -->
-		<spt-development-audit-spring-boot.version>2.0.0</spt-development-audit-spring-boot.version>
-		<spt-development-cid-jms-spring-boot.version>2.0.0</spt-development-cid-jms-spring-boot.version>
-		<spt-development-cid-web-spring-boot.version>2.0.0</spt-development-cid-web-spring-boot.version>
-		<spt-development-logging-spring-boot.version>2.0.0</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>2.0.1</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>2.0.1</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>2.0.1</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>2.0.1</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.1.0</awaitility.version>
 		<cucumber.version>6.11.0</cucumber.version>
-		<spt-development-test.version>2.0.0</spt-development-test.version>
+		<spt-development-test.version>2.0.1</spt-development-test.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>

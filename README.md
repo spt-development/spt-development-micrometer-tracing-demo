@@ -36,9 +36,9 @@ Running the demo
 
 The best way to understand how things are working is to run and debug the integration tests. However, to run the 
 demo project from the command line, the easiest way is to use the Spring Boot plugin (the project currently requires
-JDK 16).
+JDK 17).
 
-    $ mvn spring-boot:run
+    $ ./mvnw spring-boot:run
 
 The REST API can then be exercised with cURL as follows:
 
