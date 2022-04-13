@@ -18,7 +18,9 @@
 	<description>Demo project for SPT Development projects</description>
 
 	<properties>
-		<maven.compiler.release>17</maven.compiler.release>
+		<!-- Not using maven.compiler.release while supporting JDK 8 -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- Dependency versions -->
 		<checker-qual.version>3.19.0</checker-qual.version>
@@ -28,16 +30,16 @@
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
 		<guava.version>30.1.1-jre</guava.version>
 		<jboss-logmanager.version>2.1.18.Final</jboss-logmanager.version>
-		<spt-development-audit-spring-boot.version>2.0.3-SNAPSHOT</spt-development-audit-spring-boot.version>
-		<spt-development-cid-jms-spring-boot.version>2.0.3-SNAPSHOT</spt-development-cid-jms-spring-boot.version>
-		<spt-development-cid-web-spring-boot.version>2.0.3-SNAPSHOT</spt-development-cid-web-spring-boot.version>
-		<spt-development-logging-spring-boot.version>2.0.3-SNAPSHOT</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>2.0.3</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>2.0.3</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>2.0.3</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>2.0.3</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>
 		<cucumber.version>7.2.3</cucumber.version>
 		<cucumber-messages.version>17.1.1</cucumber-messages.version>
-		<spt-development-test.version>2.0.3-SNAPSHOT</spt-development-test.version>
+		<spt-development-test.version>2.0.3</spt-development-test.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
@@ -324,24 +326,4 @@
             </plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<!-- jdk* profiles used to compile against LTS versions of Java -->
-		<profile>
-			<id>jdk8</id>
-
-			<properties>
-				<maven.compiler.release>8</maven.compiler.release>
-			</properties>
-		</profile>
-
-		<profile>
-			<id>jdk11</id>
-
-			<properties>
-				<maven.compiler.release>11</maven.compiler.release>
-			</properties>
-		</profile>
-	</profiles>
-
 </project>

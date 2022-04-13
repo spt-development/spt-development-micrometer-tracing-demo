@@ -2,8 +2,8 @@ language: java
 
 jdk:
   - openjdk17
+  - openjdk11
+  - openjdk8
 
 script:
   - mvn test -B
-  - mvn clean test -Pjdk11 -B
-  - mvn clean test -Pjdk8
