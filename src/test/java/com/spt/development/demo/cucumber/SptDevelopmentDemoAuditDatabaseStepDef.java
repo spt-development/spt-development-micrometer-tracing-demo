@@ -14,9 +14,11 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
@@ -50,14 +52,14 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
                 waitForAuditEvents(Auditing.Type.SECURITY, AUTHENTICATION_SUCCESS).stream()
                         .filter(ae -> correlationId.equals(ae.getCorrelationId()))
                         .findFirst()
-                        .orElseThrow();
+                        .orElseThrow(NoSuchElementException::new);
 
         assertThat(loginAuditEvent.getId(), is(nullValue()));
 
         final Map<String, Object> details = GSON.fromJson(
                 loginAuditEvent.getDetails(), new MapStringObjectTypeToken().getType()
         );
-        assertThat(details, is(Map.of("details", Map.of("remoteAddress", "127.0.0.1"))));
+        assertThat(details, is(Collections.singletonMap("details", Collections.singletonMap("remoteAddress", "127.0.0.1"))));
 
         assertCommonAuditEventFields(loginAuditEvent);
     }
@@ -72,7 +74,7 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
                         .filter(ae -> correlationId.equals(ae.getCorrelationId()) &&
                                 Optional.ofNullable(ae.getId()).map(id -> Long.parseLong(id) == bookId).orElse(false))
                         .findFirst()
-                        .orElseThrow();
+                        .orElseThrow(NoSuchElementException::new);
 
         final Map<String, Object> auditEventDetails =
                 GSON.fromJson(newBookAuditEvent.getDetails(), new MapStringObjectTypeToken().getType());

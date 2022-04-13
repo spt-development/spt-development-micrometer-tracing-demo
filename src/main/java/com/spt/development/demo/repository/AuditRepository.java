@@ -2,11 +2,14 @@ package com.spt.development.demo.repository;
 
 import com.spt.development.audit.spring.AuditEvent;
 import lombok.NonNull;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,17 +36,16 @@ public class AuditRepository extends JdbcDaoSupport {
     }
 
     public void create(@NonNull AuditEvent auditEvent) {
-        final Map<String, Object> args = new HashMap<>(
-                Map.of(
-                        "type", auditEvent.getType(),
-                        "sub_type", auditEvent.getSubType(),
-                        "correlation_id", auditEvent.getCorrelationId(),
-                        "service_id", auditEvent.getServiceId(),
-                        "service_version", auditEvent.getServiceVersion(),
-                        "server_host_name", auditEvent.getServerHostName(),
-                        "created", auditEvent.getCreated()
-                )
-        );
+        final Map<String, Object> args = MapUtils.putAll(new HashMap<>(), new Object[]{
+                new DefaultMapEntry<>("type", auditEvent.getType()),
+                new DefaultMapEntry<>("type", auditEvent.getType()),
+                new DefaultMapEntry<>("sub_type", auditEvent.getSubType()),
+                new DefaultMapEntry<>("correlation_id", auditEvent.getCorrelationId()),
+                new DefaultMapEntry<>("service_id", auditEvent.getServiceId()),
+                new DefaultMapEntry<>("service_version", auditEvent.getServiceVersion()),
+                new DefaultMapEntry<>("server_host_name", auditEvent.getServerHostName()),
+                new DefaultMapEntry<>("created", auditEvent.getCreated())
+        });
 
         if (auditEvent.getId() != null) {
             args.put("id", auditEvent.getId());
@@ -64,6 +66,6 @@ public class AuditRepository extends JdbcDaoSupport {
         if (auditEvent.getOriginatingIP() != null) {
             args.put("originating_ip", auditEvent.getOriginatingIP());
         }
-        simpleJdbcInsert.execute(args);
+        simpleJdbcInsert.execute(Collections.unmodifiableMap(args));
     }
 }

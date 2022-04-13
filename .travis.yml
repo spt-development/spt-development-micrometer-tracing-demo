@@ -5,3 +5,5 @@ jdk:
 
 script:
   - mvn test -B
+  - mvn clean test -Pjdk11 -B
+  - mvn clean test -Pjdk8

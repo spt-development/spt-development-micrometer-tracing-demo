@@ -15,6 +15,8 @@ import java.net.InetAddress;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.spt.development.audit.spring.util.HttpRequestUtils.getClientIpAddress;
 import static com.spt.development.demo.util.Constants.Auditing;
@@ -28,7 +30,9 @@ import static org.springframework.boot.actuate.security.AuthenticationAuditListe
 @Slf4j
 @Component
 public class AuditEventListener extends AbstractAuditListener {
-    private static final Set<String> AUTHENTICATION_EVENTS = Set.of(AUTHENTICATION_SUCCESS, AUTHENTICATION_FAILURE);
+    private static final Set<String> AUTHENTICATION_EVENTS =
+            Stream.of(AUTHENTICATION_SUCCESS, AUTHENTICATION_FAILURE).collect(Collectors.toSet());
+
     private static final Gson GSON = new GsonBuilder().create();
 
     private final String appName;

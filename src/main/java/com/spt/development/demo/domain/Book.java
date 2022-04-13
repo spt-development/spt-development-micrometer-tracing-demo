@@ -1,14 +1,24 @@
 package com.spt.development.demo.domain;
 
 import lombok.Builder;
+import lombok.Value;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
-public record Book(Long id, String title, String blurb, String author, int rrp) {
-    @Builder(toBuilder = true)
-    public Book {}
+@Value
+@Builder(toBuilder = true)
+public class Book {
+    Long id;
+    String title;
+    String blurb;
+    String author;
+    int rrp;
 
     public static Book fromResultSet(ResultSet rs) throws SQLException {
         return Book.builder()
@@ -21,11 +31,13 @@ public record Book(Long id, String title, String blurb, String author, int rrp) 
     }
 
     public Map<String, Object> toParameterMap() {
-        return Map.of(
-                "title", title,
-                "blurb", blurb,
-                "author", author,
-                "rrp", rrp
+        return Collections.unmodifiableMap(
+                MapUtils.putAll(new HashMap<>(), new Object[] {
+                        new DefaultMapEntry<>("title", title),
+                        new DefaultMapEntry<>("blurb", blurb),
+                        new DefaultMapEntry<>("author", author),
+                        new DefaultMapEntry<>("rrp", rrp)
+                })
         );
     }
 }
