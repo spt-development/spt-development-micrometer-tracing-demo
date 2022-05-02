@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
 import static org.mockito.Mockito.atLeastOnce;
@@ -102,7 +103,7 @@ public class SptDevelopmentDemoLoggingStepDef {
                 .filter(e -> e.getLevel().equals(logLevel) &&
                         e.getFormattedMessage().contains(String.format("[%s] %s", correlationId, message)))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(NoSuchElementException::new);
     }
 
     private List<ILoggingEvent> getLoggingEvents() {

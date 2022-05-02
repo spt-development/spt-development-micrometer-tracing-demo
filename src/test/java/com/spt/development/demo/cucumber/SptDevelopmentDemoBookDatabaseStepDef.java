@@ -7,6 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.NoSuchElementException;
+
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.getBookIdFromResponse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -37,13 +39,13 @@ public class SptDevelopmentDemoBookDatabaseStepDef {
     public void theNewBookWillBeAddedToTheDatabase() {
         final long bookId = getBookIdFromResponse(httpTestManager);
 
-        final Book book = bookRepository.read(bookId).orElseThrow();
+        final Book book = bookRepository.read(bookId).orElseThrow(NoSuchElementException::new);
 
         assertThat(book, is(notNullValue()));
-        assertThat(book.id(), is(notNullValue()));
-        assertThat(book.title(), is(TestData.ValidJob.TITLE));
-        assertThat(book.blurb(), is(TestData.ValidJob.BLURB));
-        assertThat(book.author(), is(TestData.ValidJob.AUTHOR));
-        assertThat(book.rrp(), is(TestData.ValidJob.RRP));
+        assertThat(book.getId(), is(notNullValue()));
+        assertThat(book.getTitle(), is(TestData.ValidJob.TITLE));
+        assertThat(book.getBlurb(), is(TestData.ValidJob.BLURB));
+        assertThat(book.getAuthor(), is(TestData.ValidJob.AUTHOR));
+        assertThat(book.getRrp(), is(TestData.ValidJob.RRP));
     }
 }

@@ -13,6 +13,7 @@ import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
 import static com.spt.development.test.integration.HttpTestManager.basicCredentialsProvider;
@@ -80,9 +81,9 @@ public class SptDevelopmentDemoBooksApiStepDef {
 
     private long getLastCreatedBookId() {
         return bookRepository.readAll().stream()
-                .sorted((b1, b2) -> Long.compare(b2.id(), b1.id()))
-                .map(Book::id)
+                .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
+                .map(Book::getId)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(NoSuchElementException::new);
     }
 }

@@ -66,11 +66,11 @@ public class BookRepository extends JdbcDaoSupport {
     public Optional<Book> update(@NonNull Book book) {
         final int rows = getJdbcTemplate().update(
                 "UPDATE demo.book SET title = ?, blurb = ?, author = ?, rrp = ? WHERE book_id = ?",
-                book.title(),
-                book.blurb(),
-                book.author(),
-                book.rrp(),
-                book.id()
+                book.getTitle(),
+                book.getBlurb(),
+                book.getAuthor(),
+                book.getRrp(),
+                book.getId()
         );
 
         if (rows == 0) {

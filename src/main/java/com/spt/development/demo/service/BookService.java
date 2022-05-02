@@ -37,9 +37,9 @@ public class BookService {
 
     @Audited(type = Auditing.Type.BOOK, subType = Auditing.SubType.UPDATED)
     public Optional<Book> update(@Audited.Id long id, @NonNull @Audited.Detail Book book) {
-        if (id != book.id()) {
+        if (id != book.getId()) {
             LOG.warn("[{}] ID on book payload: {}, does not match ID in URL: {}. Using ID from URL",
-                    CorrelationId.get(), book.id(), id);
+                    CorrelationId.get(), book.getId(), id);
         }
         return bookRepository.update(book.toBuilder().id(id).build());
     }
