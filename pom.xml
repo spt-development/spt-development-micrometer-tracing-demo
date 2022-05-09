@@ -31,10 +31,10 @@
 		<guava.version>30.1.1-jre</guava.version>
 		<jboss-logmanager.version>2.1.18.Final</jboss-logmanager.version>
 		<junit-platform.version>1.8.2</junit-platform.version>
-		<spt-development-audit-spring-boot.version>2.0.9</spt-development-audit-spring-boot.version>
-		<spt-development-cid-jms-spring-boot.version>2.0.9</spt-development-cid-jms-spring-boot.version>
-		<spt-development-cid-web-spring-boot.version>2.0.9</spt-development-cid-web-spring-boot.version>
-		<spt-development-logging-spring-boot.version>2.0.9</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>2.0.10</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>2.0.10</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>2.0.10</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>2.0.10</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>

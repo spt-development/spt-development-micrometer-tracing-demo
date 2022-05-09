@@ -9,6 +9,10 @@ spring:
     username: sa
     password: password
 
+logging:
+  pattern:
+    console: -%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %replace([%X{cid}] ){'\[\] ', ''}%replace(%replace(%msg){'\r', '\\r'}){'\n', '\\n'}%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+
 spt:
   audit:
     jms:
@@ -16,3 +20,15 @@ spt:
   cid:
     web:
       use-request-header: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: mdc-disabled
+
+spt:
+  cid:
+    mdc:
+      disabled: true

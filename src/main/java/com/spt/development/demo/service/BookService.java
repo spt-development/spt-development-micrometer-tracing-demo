@@ -1,7 +1,6 @@
 package com.spt.development.demo.service;
 
 import com.spt.development.audit.spring.Audited;
-import com.spt.development.cid.CorrelationId;
 import com.spt.development.demo.domain.Book;
 import com.spt.development.demo.repository.BookRepository;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,7 @@ public class BookService {
     @Audited(type = Auditing.Type.BOOK, subType = Auditing.SubType.UPDATED)
     public Optional<Book> update(@Audited.Id long id, @NonNull @Audited.Detail Book book) {
         if (!Long.valueOf(id).equals(book.getId())) {
-            LOG.warn("[{}] ID on book payload: {}, does not match ID in URL: {}. Using ID from URL",
-                    CorrelationId.get(), book.getId(), id);
+            LOG.warn("ID on book payload: {}, does not match ID in URL: {}. Using ID from URL", book.getId(), id);
         }
         return bookRepository.update(book.toBuilder().id(id).build());
     }

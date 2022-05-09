@@ -9,19 +9,26 @@ import com.spt.development.test.integration.HttpTestManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
+import org.apache.commons.lang3.StringUtils;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
+import static com.spt.development.cid.web.filter.MdcCorrelationIdFilter.MDC_CID_KEY;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 public class SptDevelopmentDemoLoggingStepDef {
+    @Value("${spt.cid.mdc.disabled:false}")
+    private boolean mdcDisabled;
+
     @Autowired private HttpTestManager httpTestManager;
 
     private Appender<ILoggingEvent> appender;
@@ -167,9 +174,18 @@ public class SptDevelopmentDemoLoggingStepDef {
     private void assertThatMessageIsLogged(Level logLevel, String correlationId, String message) {
         final List<ILoggingEvent> loggingEvents = getLoggingEvents();
 
+        final String formattedCorrelationId = String.format("[%s]", correlationId);
+
+        final Predicate<ILoggingEvent> correlationIdPredicate = mdcDisabled
+                ? e -> !e.getMDCPropertyMap().containsKey(MDC_CID_KEY) &&
+                        e.getFormattedMessage().startsWith(formattedCorrelationId)
+                : e -> e.getMDCPropertyMap().getOrDefault(MDC_CID_KEY, StringUtils.EMPTY).equals(correlationId) &&
+                       !e.getFormattedMessage().startsWith(formattedCorrelationId);
+
         loggingEvents.stream()
-                .filter(e -> e.getLevel().equals(logLevel) &&
-                        e.getFormattedMessage().contains(String.format("[%s] %s", correlationId, message)))
+                .filter(e -> e.getLevel().equals(logLevel))
+                .filter(correlationIdPredicate)
+                .filter(e -> e.getFormattedMessage().contains(message))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }
