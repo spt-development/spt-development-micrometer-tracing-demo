@@ -31,13 +31,12 @@ public class AuditRepository extends JdbcDaoSupport {
                     .withSchemaName(SCHEMA)
                     .withTableName(TABLE);
 
-            simpleJdbcInsert.setGeneratedKeyName("audit_event_id");
+            simpleJdbcInsert.setGeneratedKeyName("event_id");
         }
     }
 
     public void create(@NonNull AuditEvent auditEvent) {
         final Map<String, Object> args = MapUtils.putAll(new HashMap<>(), new Object[]{
-                new DefaultMapEntry<>("type", auditEvent.getType()),
                 new DefaultMapEntry<>("type", auditEvent.getType()),
                 new DefaultMapEntry<>("sub_type", auditEvent.getSubType()),
                 new DefaultMapEntry<>("correlation_id", auditEvent.getCorrelationId()),
