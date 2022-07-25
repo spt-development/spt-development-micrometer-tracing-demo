@@ -8,7 +8,7 @@
  demo----------------------------------------------------------------------------
 ````
 
-[![build_status](https://travis-ci.com/spt-development/spt-development-demo.svg?branch=main)](https://travis-ci.com/spt-development/spt-development-demo)
+[![build_status](https://github.com/spt-development/spt-development-demo/actions/workflows/build.yml/badge.svg)](https://github.com/spt-development/spt-development-demo/actions)
 
 A simple demo project demonstrating how to integrate the following open source projects into a Spring Boot application,
 through the use of the corresponding Spring Boot starters.

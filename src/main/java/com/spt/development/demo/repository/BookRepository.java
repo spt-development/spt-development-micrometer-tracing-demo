@@ -30,9 +30,8 @@ public class BookRepository extends JdbcDaoSupport {
         if (simpleJdbcInsert == null) {
             simpleJdbcInsert = new SimpleJdbcInsert(getJdbcTemplate())
                     .withSchemaName(SCHEMA)
-                    .withTableName(TABLE);
-
-            simpleJdbcInsert.setGeneratedKeyName("book_id");
+                    .withTableName(TABLE)
+                    .usingGeneratedKeyColumns("book_id");
         }
     }
 

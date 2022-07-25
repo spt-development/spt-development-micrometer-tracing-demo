@@ -29,9 +29,8 @@ public class AuditRepository extends JdbcDaoSupport {
         if (simpleJdbcInsert == null) {
             simpleJdbcInsert = new SimpleJdbcInsert(getJdbcTemplate())
                     .withSchemaName(SCHEMA)
-                    .withTableName(TABLE);
-
-            simpleJdbcInsert.setGeneratedKeyName("event_id");
+                    .withTableName(TABLE)
+                    .usingGeneratedKeyColumns("event_id");
         }
     }
 
