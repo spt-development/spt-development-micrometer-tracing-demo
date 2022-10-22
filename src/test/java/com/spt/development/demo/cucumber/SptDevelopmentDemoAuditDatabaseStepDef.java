@@ -25,11 +25,8 @@ import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.MapStringObjectTypeToken;
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.getBookIdFromResponse;
 import static com.spt.development.demo.util.Constants.Auditing;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.boot.actuate.security.AuthenticationAuditListener.AUTHENTICATION_SUCCESS;
 
 public class SptDevelopmentDemoAuditDatabaseStepDef {
@@ -54,13 +51,14 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
                         .findFirst()
                         .orElseThrow(NoSuchElementException::new);
 
-        assertThat(loginAuditEvent.getId(), is(nullValue()));
+        assertThat(loginAuditEvent.getId()).isNull();
 
         final Map<String, Object> details = GSON.fromJson(
                 loginAuditEvent.getDetails(), new MapStringObjectTypeToken().getType()
         );
-        assertThat(details, is(Collections.singletonMap("details", Collections.singletonMap("remoteAddress", "127.0.0.1"))));
-
+        assertThat(details).containsExactlyEntriesOf(
+                Collections.singletonMap("details", Collections.singletonMap("remoteAddress", "127.0.0.1"))
+        );
         assertCommonAuditEventFields(loginAuditEvent);
     }
 
@@ -84,7 +82,7 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
 
         responseBody.remove("id"); // ID won't be in details
 
-        assertThat(auditEventDetails, is(responseBody));
+        assertThat(auditEventDetails).isEqualTo(responseBody);
 
         assertCommonAuditEventFields(newBookAuditEvent);
     }
@@ -102,13 +100,13 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
     }
 
     private void assertCommonAuditEventFields(AuditEvent auditEvent) {
-        assertThat(auditEvent.getUserId(), is(nullValue()));
-        assertThat(auditEvent.getUsername(), is(TestData.Api.USERNAME));
-        assertThat(auditEvent.getOriginatingIP(), is(notNullValue()));
-        assertThat(auditEvent.getServiceId(), is(appName));
-        assertThat(auditEvent.getServiceVersion(), is(buildProperties.getVersion()));
-        assertThat(auditEvent.getServerHostName(), is(notNullValue()));
-        assertThat(auditEvent.getCreated(), is(notNullValue()));
+        assertThat(auditEvent.getUserId()).isNull();
+        assertThat(auditEvent.getUsername()).isEqualTo(TestData.Api.USERNAME);
+        assertThat(auditEvent.getOriginatingIP()).isNotNull();
+        assertThat(auditEvent.getServiceId()).isEqualTo(appName);
+        assertThat(auditEvent.getServiceVersion()).isEqualTo(buildProperties.getVersion());
+        assertThat(auditEvent.getServerHostName()).isNotNull();
+        assertThat(auditEvent.getCreated()).isNotNull();
     }
 
     private static class AuditEventMapper implements RowMapper<AuditEvent> {

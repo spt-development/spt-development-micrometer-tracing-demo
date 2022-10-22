@@ -1,4 +1,4 @@
-name: spt-development-cid
+name: spt-development-demo
 
 on: [push, pull_request]
 
