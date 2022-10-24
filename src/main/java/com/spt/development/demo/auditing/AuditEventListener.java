@@ -52,7 +52,7 @@ public class AuditEventListener extends AbstractAuditListener {
 
     @Override
     protected void onAuditEvent(AuditEvent event) {
-        LOG.debug("[{}] On audit event: {}", CorrelationId.get(), event);
+        LOG.debug("On audit event: {}", event);
 
         try {
             if (AUTHENTICATION_EVENTS.contains(event.getType())) {
@@ -73,7 +73,7 @@ public class AuditEventListener extends AbstractAuditListener {
             }
         }
         catch (Throwable t) {
-            LOG.error("[{}] Failed to send audit event: {}", CorrelationId.get(), event, t);
+            LOG.error("Failed to send audit event: {}", event, t);
         }
     }
 }
