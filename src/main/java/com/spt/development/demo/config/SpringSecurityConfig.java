@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
+                .authorizeHttpRequests()
                     .anyRequest().authenticated()
                 .and()
                 .httpBasic();

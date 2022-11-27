@@ -6,16 +6,18 @@ import com.google.gson.GsonBuilder;
 import com.spt.development.demo.domain.Book;
 import com.spt.development.demo.repository.BookRepository;
 import com.spt.development.test.integration.HttpTestManager;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.core5.http.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
 import static com.spt.development.test.integration.HttpTestManager.basicCredentialsProvider;
@@ -41,11 +43,15 @@ public class SptDevelopmentDemoBooksApiStepDef {
     public void theLastCreatedBookIsReadWithAGETRequestToTheBooksRESTAPIAndTheCorrelationIDIsSetInTheRequestHeader() throws Throwable {
         final long lastCreatedBookId = getLastCreatedBookId();
 
-        final HttpGet httpGet = new HttpGet();
-        httpGet.addHeader(CID_HEADER, TestData.CORRELATION_ID);
+        final Function<URI, HttpUriRequestBase> requestFactory = (uri) -> {
+            final HttpGet request = new HttpGet(uri);
+            request.addHeader(CID_HEADER, TestData.CORRELATION_ID);
+
+            return request;
+        };
 
         httpTestManager.doRequest(
-                basicCredentialsProvider(TestData.Api.USERNAME, TestData.Api.PASSWORD), httpGet,
+                basicCredentialsProvider(TestData.Api.USERNAME, TestData.Api.PASSWORD), requestFactory,
                 String.format("/api/v1.0/books/%d", lastCreatedBookId)
         );
     }
