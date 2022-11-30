@@ -36,7 +36,7 @@ Running the demo
 
 The best way to understand how things are working is to run and debug the integration tests. However, to run the 
 demo project from the command line, the easiest way is to use the Spring Boot plugin (the project currently requires
-JDK 17).
+JDK 8 or above).
 
     $ ./mvnw spring-boot:run
 
