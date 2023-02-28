@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.2</version>
+		<version>3.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -24,16 +24,16 @@
 		<commons-collections.version>4.4</commons-collections.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
 		<jboss-logmanager.version>2.1.19.Final</jboss-logmanager.version>
-		<spt-development-audit-spring-boot.version>3.0.2</spt-development-audit-spring-boot.version>
-		<spt-development-cid-jms-spring-boot.version>3.0.2</spt-development-cid-jms-spring-boot.version>
-		<spt-development-cid-web-spring-boot.version>3.0.2</spt-development-cid-web-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.0.2</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.0.3</spt-development-audit-spring-boot.version>
+		<spt-development-cid-jms-spring-boot.version>3.0.3</spt-development-cid-jms-spring-boot.version>
+		<spt-development-cid-web-spring-boot.version>3.0.3</spt-development-cid-web-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.0.3</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>
-		<cucumber.version>7.11.0</cucumber.version>
+		<cucumber.version>7.11.1</cucumber.version>
 		<junit-platform.version>1.9.2</junit-platform.version>
-		<spt-development-test.version>3.0.2</spt-development-test.version>
+		<spt-development-test.version>3.0.3</spt-development-test.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
