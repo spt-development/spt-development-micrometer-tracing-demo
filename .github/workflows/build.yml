@@ -16,16 +16,16 @@ jobs:
           distribution: 'temurin'
       - run: mvn clean verify -B
 
-      - name: Set up JDK 19
+      - name: Set up JDK 20
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 19
+          release: 20
       - run: mvn clean verify -B
 
-      - name: Set up JDK 19 (MDC disabled)
+      - name: Set up JDK 20 (MDC disabled)
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 19
+          release: 20
       - run: mvn clean verify -Dspring.profiles.active=mdc-disabled -B
