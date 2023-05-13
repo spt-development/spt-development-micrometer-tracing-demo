@@ -16,7 +16,7 @@ public class AuditListener {
     private final AuditRepository auditRepository;
 
     @JmsListener(destination = JmsConfig.AUDIT_EVENT_QUEUE)
-    public void onMessage(// NOTE. The correlation ID is used by spt-development-cid-jms-spring aspect
+    public void onMessage(// NOTE. The correlation ID is used by JmsTracePropagator
                           @Header(JmsHeaders.CORRELATION_ID) String correlationId,
                           @Payload String auditEventJson) {
         auditRepository.create(AuditEvent.fromJson(auditEventJson));

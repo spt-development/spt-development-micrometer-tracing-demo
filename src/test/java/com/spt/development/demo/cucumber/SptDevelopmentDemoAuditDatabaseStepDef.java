@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
+import static com.spt.development.demo.config.WebConfig.TRACE_ID_HEADER;
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.MapStringObjectTypeToken;
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.getBookIdFromResponse;
 import static com.spt.development.demo.util.Constants.Auditing;
@@ -43,11 +43,11 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
 
     @Then("a successful login audit event will eventually be created")
     public void aSuccessfulLoginAuditEventWillEventuallyBeCreated() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
         final AuditEvent loginAuditEvent =
                 waitForAuditEvents(Auditing.Type.SECURITY, AUTHENTICATION_SUCCESS).stream()
-                        .filter(ae -> correlationId.equals(ae.getCorrelationId()))
+                        .filter(ae -> traceId.equals(ae.getCorrelationId()))
                         .findFirst()
                         .orElseThrow(NoSuchElementException::new);
 
@@ -65,11 +65,11 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
     @Then("a new book audit event will eventually be created")
     public void aNewBookAuditEventWillEventuallyBeCreated() {
         final long bookId = getBookIdFromResponse(httpTestManager);
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
         final AuditEvent newBookAuditEvent =
                 waitForAuditEvents(Auditing.Type.BOOK, Auditing.SubType.CREATED).stream()
-                        .filter(ae -> correlationId.equals(ae.getCorrelationId()) &&
+                        .filter(ae -> traceId.equals(ae.getCorrelationId()) &&
                                 Optional.ofNullable(ae.getId()).map(id -> Long.parseLong(id) == bookId).orElse(false))
                         .findFirst()
                         .orElseThrow(NoSuchElementException::new);

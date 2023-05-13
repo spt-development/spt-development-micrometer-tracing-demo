@@ -3,7 +3,6 @@ package com.spt.development.demo.cucumber;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.spt.development.cid.CorrelationId;
 import com.spt.development.demo.cucumber.config.TestManagerConfig;
 import com.spt.development.demo.cucumber.util.DatabaseTestUtil;
 import com.spt.development.test.integration.HttpTestManager;
@@ -14,6 +13,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.spring.CucumberContextConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
+import static com.spt.development.demo.config.WebConfig.TRACE_ID_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -33,11 +33,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 )
 @CucumberContextConfiguration
 @Import(TestManagerConfig.class)
+@AutoConfigureObservability(metrics = false) // <-- Required to switch on tracing in tests, not required in production code
 public class SptDevelopmentDemoStepDef {
     private static final Gson GSON = new GsonBuilder().create();
 
     interface TestData {
-        String CORRELATION_ID = "709ac6e1-8ace-422d-9421-b8d93f0c6505";
+        String TRACE_ID = "709ac6e18ace422d9421b8d93f0c6505";
+        String TRACE_PARENT = String.format("00-%s-1444ca74c3d2133a-01", TRACE_ID);
 
         interface Resource {
             String ROOT = "/com/spt/development/demo/cucumber/requests/";
@@ -79,8 +81,6 @@ public class SptDevelopmentDemoStepDef {
         httpTestManager.init(localServerPort);
 
         clearDatabase();
-
-        CorrelationId.set("integration-test-runner-cid");
     }
 
     private void clearDatabase() {
@@ -102,18 +102,18 @@ public class SptDevelopmentDemoStepDef {
         assertThat(httpTestManager.getStatusCode()).isEqualTo(statusCode);
     }
 
-    @Then("^the response will have a correlationId header$")
-    public void theResponseWillHaveACorrelationIdHeader() {
-        final Optional<String> correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER);
+    @Then("^the response will have a traceId header$")
+    public void theResponseWillHaveATraceIDHeader() {
+        final Optional<String> traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER);
 
-        assertThat(correlationId).isPresent();
+        assertThat(traceId).isPresent();
     }
 
-    @Then("the response will have the correlationID header sent in the request")
-    public void theResponseWillHaveTheCorrelationIDHeaderSentInTheRequest() {
-        final Optional<String> correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER);
+    @Then("the response will have the traceId header sent in the request")
+    public void theResponseWillHaveTheTraceIDHeaderSentInTheRequest() {
+        final Optional<String> traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER);
 
-        assertThat(correlationId).contains(TestData.CORRELATION_ID);
+        assertThat(traceId).contains(TestData.TRACE_ID);
     }
 
     static long getBookIdFromResponse(HttpTestManager httpTestManager) {

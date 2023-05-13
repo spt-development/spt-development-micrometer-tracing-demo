@@ -19,7 +19,7 @@ CREATE TABLE audit.event (
     event_id         INT AUTO_INCREMENT NOT NULL,
     type             VARCHAR(50) NOT NULL,
     sub_type         VARCHAR(50) NOT NULL,
-    correlation_id   CHAR(36) NOT NULL,
+    correlation_id   VARCHAR(36) NOT NULL,
     id               TEXT,
     details          TEXT,
     user_id          TEXT,
