@@ -19,12 +19,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
 import static com.spt.development.test.integration.HttpTestManager.basicCredentialsProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SptDevelopmentDemoBooksApiStepDef {
     private static final Gson GSON = new GsonBuilder().create();
+
+    private static final String TRACE_PARENT_HEADER = "traceparent";
 
     private interface TestData extends SptDevelopmentDemoStepDef.TestData {
     }
@@ -39,13 +40,13 @@ public class SptDevelopmentDemoBooksApiStepDef {
         );
     }
 
-    @When("the last created book is read with a GET request to the books REST API and the correlation ID is set in the request header")
-    public void theLastCreatedBookIsReadWithAGETRequestToTheBooksRESTAPIAndTheCorrelationIDIsSetInTheRequestHeader() throws Throwable {
+    @When("the last created book is read with a GET request to the books REST API and a traceparent with the traceId is set in the request header")
+    public void theLastCreatedBookIsReadWithAGETRequestToTheBooksRESTAPIAndATraceParentWithTheTraceIDIsSetInTheRequestHeader() throws Throwable {
         final long lastCreatedBookId = getLastCreatedBookId();
 
         final Function<URI, HttpUriRequestBase> requestFactory = (uri) -> {
             final HttpGet request = new HttpGet(uri);
-            request.addHeader(CID_HEADER, TestData.CORRELATION_ID);
+            request.addHeader(TRACE_PARENT_HEADER, TestData.TRACE_PARENT);
 
             return request;
         };

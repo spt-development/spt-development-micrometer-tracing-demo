@@ -4,7 +4,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
   Scenario: Creates a new book
     When a new book is POSTed to the books REST API
     Then the server will respond with a HTTP status of '201'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response body will contain the new book details
     And the new book will be added to the database
     And a successful login audit event will eventually be created
@@ -16,9 +16,9 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
   @HappyPath @BooksApi @Read
   Scenario:  Reads an existing book specifying the correlation ID in the request header
     Given a book exists in the database
-    When the last created book is read with a GET request to the books REST API and the correlation ID is set in the request header
+    When the last created book is read with a GET request to the books REST API and a traceparent with the traceId is set in the request header
     Then the server will respond with a HTTP status of '200'
-    And the response will have the correlationID header sent in the request
+    And the response will have the traceId header sent in the request
     And the response will contain the last created book details
     And a successful login audit event will eventually be created
     And the book read is logged at all tiers
@@ -28,7 +28,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
   Scenario: Attempts to read an unknown book
     When a book with an unknown ID is read with a GET request
     Then the server will respond with a HTTP status of '404'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response body will be empty
     And a successful login audit event will eventually be created
     And the unsuccessful book read is logged at all tiers
@@ -39,7 +39,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
     Given a book exists in the database
     When all books are read with a GET request
     Then the server will respond with a HTTP status of '200'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response will contain all books
     And a successful login audit event will eventually be created
     And the book read all is logged at all tiers
@@ -50,7 +50,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
     Given a book exists in the database
     When the last created book is updated with a PUT request to the books REST API
     Then the server will respond with a HTTP status of '200'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response will contain the updated book details
     And the last created book will be updated in the database
     And a successful login audit event will eventually be created
@@ -62,7 +62,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
   Scenario: Attempts to update an existing book
     When a book with an unknown ID is updated with a PUT request to the books REST API
     Then the server will respond with a HTTP status of '404'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response body will be empty
     And a successful login audit event will eventually be created
     And the unsuccessful book update is logged at all tiers
@@ -73,7 +73,7 @@ Feature: SPT Development Demo - Books API: demonstrates and tests the spt-develo
     Given a book exists in the database
     When the last created book is deleted with a DELETE request to the books REST API
     Then the server will respond with a HTTP status of '204'
-    And the response will have a correlationId header
+    And the response will have a traceId header
     And the response body will be empty
     And the last created book will be deleted from the database
     And the book delete is logged at all tiers

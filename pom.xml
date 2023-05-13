@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>com.spt-development</groupId>
-	<artifactId>spt-development-demo</artifactId>
+	<artifactId>spt-development-micrometer-tracing-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>spt-development-demo</name>
-	<description>Demo project for SPT Development projects</description>
+	<name>spt-development-micrometer-tracing-demo</name>
+	<description>Demo project for SPT Development projects integrated with Micrometer tracing</description>
 
 	<properties>
 		<maven.compiler.release>17</maven.compiler.release>
@@ -25,8 +25,6 @@
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
 		<jboss-logmanager.version>2.1.19.Final</jboss-logmanager.version>
 		<spt-development-audit-spring-boot.version>3.0.6</spt-development-audit-spring-boot.version>
-		<spt-development-cid-jms-spring-boot.version>3.0.6</spt-development-cid-jms-spring-boot.version>
-		<spt-development-cid-web-spring-boot.version>3.0.6</spt-development-cid-web-spring-boot.version>
 		<spt-development-logging-spring-boot.version>3.0.6</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
@@ -99,6 +97,11 @@
 
 		<!-- Spring third-party dependencies -->
 		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
@@ -115,21 +118,23 @@
 		<dependency>
 			<groupId>com.spt-development</groupId>
 			<artifactId>spt-development-audit-spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.spt-development</groupId>
+					<artifactId>spt-development-cid</artifactId>
+				</exclusion>
+			</exclusions>
 			<version>${spt-development-audit-spring-boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.spt-development</groupId>
-			<artifactId>spt-development-cid-jms-spring-boot-starter</artifactId>
-			<version>${spt-development-cid-jms-spring-boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.spt-development</groupId>
-			<artifactId>spt-development-cid-web-spring-boot-starter</artifactId>
-			<version>${spt-development-cid-web-spring-boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.spt-development</groupId>
 			<artifactId>spt-development-logging-spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.spt-development</groupId>
+					<artifactId>spt-development-cid</artifactId>
+				</exclusion>
+			</exclusions>
 			<version>${spt-development-logging-spring-boot.version}</version>
 		</dependency>
 

@@ -19,13 +19,15 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
-import static com.spt.development.cid.web.filter.CorrelationIdFilter.CID_HEADER;
-import static com.spt.development.cid.web.filter.MdcCorrelationIdFilter.MDC_CID_KEY;
+import static com.spt.development.demo.config.WebConfig.TRACE_ID_HEADER;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 public class SptDevelopmentDemoLoggingStepDef {
+    private static final String MDC_TRACE_ID_KEY = "traceId";
+
     @Value("${spt.cid.mdc.disabled:false}")
     private boolean mdcDisabled;
 
@@ -56,86 +58,86 @@ public class SptDevelopmentDemoLoggingStepDef {
 
     @Then("the book creation is logged at all tiers")
     public void theBookCreationIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.create(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.create(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.create(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.create Returned: Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.create Returned: Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.create Returned: <201");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.create(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.create(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.create(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.create Returned: Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.create Returned: Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.create Returned: <201");
     }
 
     @Then("the book read is logged at all tiers")
     public void theBookReadIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.read(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.read(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.read(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.read Returned: Optional[Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.read Returned: Optional[Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.read Returned: <200");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.read(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.read(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.read(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.read Returned: Optional[Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.read Returned: Optional[Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.read Returned: <200");
     }
 
     @Then("the unsuccessful book read is logged at all tiers")
     public void theUnsuccessfulBookReadIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.read(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.read(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.read(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.read Returned: Optional.empty");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.read Returned: Optional.empty");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.read Returned: <404");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.read(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.read(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.read(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.read Returned: Optional.empty");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.read Returned: Optional.empty");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.read Returned: <404");
     }
 
     @Then("the book read all is logged at all tiers")
     public void theBookReadAllIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.readAll(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.readAll(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.readAll(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.readAll Returned: [Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.readAll Returned: [Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.readAll Returned: <200");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.readAll(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.readAll(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.readAll(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.readAll Returned: [Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.readAll Returned: [Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.readAll Returned: <200");
     }
 
     @Then("the book update is logged at all tiers")
     public void theBookUpdateIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.update(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.update(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.update(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.update Returned: Optional[Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.update Returned: Optional[Book");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.update Returned: <200");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.update(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.update(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.update(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.update Returned: Optional[Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.update Returned: Optional[Book");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.update Returned: <200");
     }
 
     @Then("the unsuccessful book update is logged at all tiers")
     public void theUnsuccessfulBookUpdateIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.update(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.update(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.update(");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookRepository.update Returned: Optional.empty");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookService.update Returned: Optional.empty");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.update Returned: <404");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.update(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.update(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.update(");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookRepository.update Returned: Optional.empty");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookService.update Returned: Optional.empty");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.update Returned: <404");
     }
 
     @Then("the book delete is logged at all tiers")
     public void theBookDeleteIsLoggedAtAllTiers() {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String traceId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
-        assertThatMessageIsLogged(Level.INFO, correlationId, "BookController.delete(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.delete(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.delete(");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookRepository.delete - complete");
-        assertThatMessageIsLogged(Level.DEBUG, correlationId, "BookService.delete - complete");
-        assertThatMessageIsLogged(Level.TRACE, correlationId, "BookController.delete Returned: <204");
+        assertThatMessageIsLogged(Level.INFO, traceId, "BookController.delete(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.delete(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.delete(");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookRepository.delete - complete");
+        assertThatMessageIsLogged(Level.DEBUG, traceId, "BookService.delete - complete");
+        assertThatMessageIsLogged(Level.TRACE, traceId, "BookController.delete Returned: <204");
     }
 
     @Then("the successful login audit event processing is logged at all tiers")
@@ -159,7 +161,7 @@ public class SptDevelopmentDemoLoggingStepDef {
     }
 
     public void assertThatAuditLogCreationIsLogged(String type, String subType) {
-        final String correlationId = httpTestManager.getResponseHeaderValue(CID_HEADER).get();
+        final String correlationId = httpTestManager.getResponseHeaderValue(TRACE_ID_HEADER).get();
 
         assertThatMessageIsLogged(Level.INFO, correlationId,
                 String.format("AuditListener.onMessage('%s', '{\"type\":\"%s\",\"subType\":\"%s\"", correlationId, type, subType));
@@ -171,16 +173,17 @@ public class SptDevelopmentDemoLoggingStepDef {
         assertThatMessageIsLogged(Level.INFO, correlationId, "AuditListener.onMessage - complete");
     }
 
-    private void assertThatMessageIsLogged(Level logLevel, String correlationId, String message) {
+    private void assertThatMessageIsLogged(Level logLevel, String traceId, String message) {
         final List<ILoggingEvent> loggingEvents = getLoggingEvents();
 
-        final String formattedCorrelationId = String.format("[%s]", correlationId);
+        // Trace ID *and* spanID expected to be logged, e.g: [645f5da04e4dd6b128087095176a05cf,5b1a2845af71edf3] ...
+        final Pattern traceContextRegex = Pattern.compile(String.format("\\%s,[a-f0-9]{16}\\]", traceId));
 
         final Predicate<ILoggingEvent> correlationIdPredicate = mdcDisabled
-                ? e -> !e.getMDCPropertyMap().containsKey(MDC_CID_KEY) &&
-                        e.getFormattedMessage().startsWith(formattedCorrelationId)
-                : e -> e.getMDCPropertyMap().getOrDefault(MDC_CID_KEY, StringUtils.EMPTY).equals(correlationId) &&
-                       !e.getFormattedMessage().startsWith(formattedCorrelationId);
+                ? e -> !e.getMDCPropertyMap().containsKey(MDC_TRACE_ID_KEY) &&
+                        traceContextRegex.matcher(e.getFormattedMessage()).matches()
+                : e -> e.getMDCPropertyMap().getOrDefault(MDC_TRACE_ID_KEY, StringUtils.EMPTY).equals(traceId) &&
+                       !traceContextRegex.matcher(e.getFormattedMessage()).matches();
 
         loggingEvents.stream()
                 .filter(e -> e.getLevel().equals(logLevel))

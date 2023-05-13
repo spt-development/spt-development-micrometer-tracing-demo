@@ -1,8 +1,9 @@
 package com.spt.development.demo.auditing;
 
 import com.spt.development.audit.spring.AuditEventWriter;
-import com.spt.development.cid.CorrelationId;
-import org.junit.jupiter.api.BeforeEach;
+import io.micrometer.tracing.CurrentTraceContext;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.actuate.audit.AuditEvent;
@@ -17,12 +18,7 @@ import static org.springframework.boot.actuate.security.AuthenticationAuditListe
 class AuditEventListenerTest {
     private interface TestData {
         String APP_NAME = "Test app name";
-        String CORRELATION_ID = "443debaf-1a0b-4d60-8118-e458b75e24ff";
-    }
-
-    @BeforeEach
-    void setUp() {
-        CorrelationId.set(TestData.CORRELATION_ID);
+        String TRACE_ID = "443debaf-1a0b-4d60-8118-e458b75e24ff";
     }
 
     @Test
@@ -45,12 +41,23 @@ class AuditEventListenerTest {
     }
 
     private AuditEventListener createListener(AuditEventListenerArgs args) {
-        return new AuditEventListener(args.appName, args.buildProperties, args.auditEventWriter);
+        return new AuditEventListener(args.appName, args.tracer, args.buildProperties, args.auditEventWriter);
     }
 
     private static class AuditEventListenerArgs {
         String appName = TestData.APP_NAME;
+        Tracer tracer = Mockito.mock(Tracer.class);
         BuildProperties buildProperties = Mockito.mock(BuildProperties.class);
         AuditEventWriter auditEventWriter = Mockito.mock(AuditEventWriter.class);
+
+        AuditEventListenerArgs() {
+            final TraceContext context = Mockito.mock(TraceContext.class);
+            when(context.traceId()).thenReturn(TestData.TRACE_ID);
+
+            final CurrentTraceContext currentContext = Mockito.mock(CurrentTraceContext.class);
+            when(currentContext.context()).thenReturn(context);
+
+            when(tracer.currentTraceContext()).thenReturn(currentContext);
+        }
     }
 }
