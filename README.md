@@ -49,13 +49,19 @@ $ curl -v -u bob:password123! --header "Content-Type: application/json" \
     --request POST \
     --data '{"title":"My Book","blurb":"My blurb","author":"Me","rrp":1000}' \
     http://localhost:8080/api/v1.0/books
-
+```
+```shell
 $ curl -v -u bob:password123! --header "Content-Type: application/json" \
     --request PUT \
     --data '{"id":44, "title":"My Book - updated","blurb":"My blurb - updated","author":"Me","rrp":1000}' \
     http://localhost:8080/api/v1.0/books/4
-
+```
+```shell
 $ curl -v -u bob:password123! http://localhost:8080/api/v1.0/books
+```
+```shell
 $ curl -v -u bob:password123! http://localhost:8080/api/v1.0/books/4
+```
+```shell
 $ curl -v -u bob:password123! -X DELETE http://localhost:8080/api/v1.0/books/4
 ```
