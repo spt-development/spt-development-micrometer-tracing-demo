@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.1</version>
+		<version>3.1.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -23,14 +23,14 @@
 		<!-- Dependency versions -->
 		<commons-collections.version>4.4</commons-collections.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.1.1</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.1.1</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.1.2</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.1.2</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>
-		<cucumber.version>7.12.1</cucumber.version>
-		<junit-platform.version>1.9.3</junit-platform.version>
-		<spt-development-test.version>3.0.7</spt-development-test.version>
+		<cucumber.version>7.13.0</cucumber.version>
+		<junit-platform.version>1.10.0</junit-platform.version>
+		<spt-development-test.version>3.0.8</spt-development-test.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.1.2</checkstyle-maven-plugin.version>
