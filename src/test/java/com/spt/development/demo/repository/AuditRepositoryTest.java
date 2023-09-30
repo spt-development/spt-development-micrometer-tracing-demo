@@ -73,6 +73,7 @@ class AuditRepositoryTest {
 
     private AuditRepository createRepository(AuditRepositoryArgs args) {
         final AuditRepository repository = new AuditRepository(args.dataSource);
+        repository.init();
 
         ReflectionTestUtils.setField(repository, "simpleJdbcInsert", args.simpleJdbcInsert);
 

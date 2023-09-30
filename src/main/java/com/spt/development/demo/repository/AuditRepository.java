@@ -1,6 +1,7 @@
 package com.spt.development.demo.repository;
 
 import com.spt.development.audit.spring.AuditEvent;
+import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
@@ -18,9 +19,16 @@ public class AuditRepository extends JdbcDaoSupport {
     private static final String SCHEMA = "audit";
     private static final String TABLE = "event";
 
-    private SimpleJdbcInsert simpleJdbcInsert;
+    private final DataSource dataSource;
+
+    private SimpleJdbcInsert simpleJdbcInsert = null;
 
     public AuditRepository(final DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    public void init() {
         setDataSource(dataSource);
     }
 
