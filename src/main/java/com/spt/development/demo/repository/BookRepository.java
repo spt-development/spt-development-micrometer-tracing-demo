@@ -1,6 +1,7 @@
 package com.spt.development.demo.repository;
 
 import com.spt.development.demo.domain.Book;
+import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,9 +20,16 @@ public class BookRepository extends JdbcDaoSupport {
     private static final String SCHEMA = "demo";
     private static final String TABLE = "book";
 
-    private SimpleJdbcInsert simpleJdbcInsert;
+    private final DataSource dataSource;
+
+    private SimpleJdbcInsert simpleJdbcInsert = null;
 
     public BookRepository(final DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    public void init() {
         setDataSource(dataSource);
     }
 
