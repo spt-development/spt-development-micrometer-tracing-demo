@@ -16,9 +16,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.boot.actuate.security.AuthenticationAuditListener.AUTHENTICATION_SUCCESS;
 
 class AuditEventListenerTest {
-    private interface TestData {
-        String APP_NAME = "Test app name";
-        String TRACE_ID = "443debaf-1a0b-4d60-8118-e458b75e24ff";
+    private static class TestData {
+        static final String APP_NAME = "Test app name";
+        static final String TRACE_ID = "443debaf-1a0b-4d60-8118-e458b75e24ff";
     }
 
     @Test

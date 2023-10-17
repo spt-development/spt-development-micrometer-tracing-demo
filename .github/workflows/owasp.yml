@@ -1,20 +1,17 @@
-name: spt-development-micrometer-tracing-demo
+name: OWASP Dependency Check
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  build:
+  owasp:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
 
       - name: Set up JDK 21
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
           release: 21
-      - run: ./mvnw clean verify -B
+      - run: ./mvnw clean dependency-check:check -B

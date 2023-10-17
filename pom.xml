@@ -20,24 +20,37 @@
 	<properties>
 		<maven.compiler.release>17</maven.compiler.release>
 
+		<!-- Maven version -->
+		<maven.min.version>3.9.4</maven.min.version>
+
 		<!-- Dependency versions -->
 		<commons-collections.version>4.4</commons-collections.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.1.4</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.1.4</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.1.5-SNAPSHOT</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.1.5-SNAPSHOT</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>
 		<cucumber.version>7.14.0</cucumber.version>
 		<junit-platform.version>1.10.0</junit-platform.version>
-		<spt-development-test.version>3.0.10</spt-development-test.version>
+		<spt-development-test.version>3.1.0-SNAPSHOT</spt-development-test.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
+		<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
 		<jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+		<license-maven-plugin.version>2.2.0</license-maven-plugin.version>
+		<maven-jxr-plugin.version>3.3.0</maven-jxr-plugin.version>
+		<maven-pmd-plugin.version>3.21.0</maven-pmd-plugin.version>
+		<maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
+		<pitest-maven.version>1.15.1</pitest-maven.version>
+		<spotbugs-plugin.version>4.7.3.6</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
-		<checkstyle.version>10.12.3</checkstyle.version>
+		<checkstyle.version>10.12.4</checkstyle.version>
+		<findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
+		<findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
+		<pitest-junit5-plugin.version>1.2.0</pitest-junit5-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -86,13 +99,20 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<scope>runtime</scope>
 			<!-- Version defined in parent dependencyManagement section -->
 		</dependency>
 
 		<!-- Spring third-party dependencies -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing</artifactId>
+			<!-- Version defined in parent dependencyManagement section -->
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+			<scope>runtime</scope>
 			<!-- Version defined in parent dependencyManagement section -->
 		</dependency>
 		<dependency>
@@ -206,10 +226,49 @@
 	</dependencies>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Plugins used in custom profiles, added so that new versions are detected yb the versions plugin -->
+				<plugin>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>${maven-pmd-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${license-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>${pitest-maven.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.pitest</groupId>
+							<artifactId>pitest-junit5-plugin</artifactId>
+							<version>${pitest-junit5-plugin.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>parse-version</id>
+						<goals>
+							<goal>parse-version</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
@@ -220,6 +279,39 @@
 						<arg>-Werror</arg>
 					</compilerArgs>
 				</configuration>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>analyze</id>
+						<goals>
+							<goal>analyze-only</goal>
+						</goals>
+						<configuration>
+							<failOnWarning>true</failOnWarning>
+							<ignoreNonCompile>true</ignoreNonCompile>
+							<ignoreAllNonTestScoped>true</ignoreAllNonTestScoped>
+							<!--
+                                 Only include false positives. On the whole these will be transitive dependencies
+                                 of test scoped artifacts and compile time artifacts.
+                              -->
+							<ignoredNonTestScopedDependencies>ch.qos.logback:logback-core,ch.qos.logback:logback-classic</ignoredNonTestScopedDependencies>
+							<!--
+                                 Only include false positives and starters that can't be resolved by setting the
+                                 scope to runtime.
+                              -->
+							<ignoredUnusedDeclaredDependencies>com.spt-development:*-spring-boot-starter::,org.springframework.boot:spring-boot-starter-*::,org.springframework.boot:spring-boot-docker-compose</ignoredUnusedDeclaredDependencies>
+							<!--
+                                 Ignoring all used undeclared dependencies as it goes against the design
+                                 of Spring Boot and results in a much larger than otherwise necessary pom.
+                              -->
+							<ignoredUsedUndeclaredDependencies>:::</ignoredUsedUndeclaredDependencies>
+						</configuration>
+					</execution>
+				</executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
 			</plugin>
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
@@ -233,6 +325,16 @@
 						<configuration>
 							<rules>
 								<dependencyConvergence/>
+								<requireFilesExist>
+									<files>
+										<!-- Minimum set of documentation required -->
+										<file>${project.basedir}/README.md</file>
+										<file>${project.basedir}/documentation/releases/release-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.md</file>
+									</files>
+								</requireFilesExist>
+								<requireMavenVersion>
+									<version>${maven.min.version}</version>
+								</requireMavenVersion>
 							</rules>
 						</configuration>
 					</execution>
@@ -250,30 +352,45 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<configLocation>spt_checks.xml</configLocation>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
-					<linkXRef>false</linkXRef>
+					<violationSeverity>warning</violationSeverity>
 				</configuration>
 				<executions>
 					<execution>
+						<id>google-checks</id>
+						<phase>validate</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
+						<configuration>
+							<configLocation>google_checks.xml</configLocation>
+							<suppressionsLocation>config/checkstyle/google_checks_suppressions.xml</suppressionsLocation>
+						</configuration>
+					</execution>
+					<execution>
+						<id>spt-checks</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<configLocation>config/checkstyle/spt_checks.xml</configLocation>
+							<suppressionsLocation>config/checkstyle/spt_checks_suppressions.xml</suppressionsLocation>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
-					<disableXmlReport>true</disableXmlReport>
-					<trimStackTrace>false</trimStackTrace>
 					<!--
                          classesDirectory is required to work around a bug that is discussed at
                          https://github.com/spring-projects/spring-boot/issues/6254. There are a number of different
                          workarounds, but this seems to be the cleanest.
                       -->
 					<classesDirectory>${project.build.outputDirectory}</classesDirectory>
+					<trimStackTrace>false</trimStackTrace>
 				</configuration>
 				<executions>
 					<execution>
@@ -306,27 +423,57 @@
 				<!-- Version defined in spring-boot-parent pluginManagement section -->
 			</plugin>
 			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>${spotbugs-plugin.version}</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<xmlOutput>false</xmlOutput>
+					<plugins>
+						<plugin>
+							<groupId>com.h3xstream.findsecbugs</groupId>
+							<artifactId>findsecbugs-plugin</artifactId>
+							<version>${findbugs-sec-bug-pattern.version}</version>
+						</plugin>
+						<plugin>
+							<groupId>jp.skypencil.findbugs.slf4j</groupId>
+							<artifactId>bug-pattern</artifactId>
+							<version>${findbugs-slf4j-bug-pattern.version}</version>
+						</plugin>
+					</plugins>
+					<excludeFilterFile>${project.basedir}/config/findbugs/exclude.xml</excludeFilterFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
 				<configuration>
 					<outputFile>${project.build.directory}/dependency-versions.txt</outputFile>
-					<rulesUri>file:///${project.basedir}/maven-version-rules.xml</rulesUri>
+					<rulesUri>file:///${project.basedir}/config/versions/version-rules.xml</rulesUri>
 				</configuration>
-				<version>${versions-maven-plugin.version}</version>
-			</plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>build-info</id>
-                        <goals>
-                            <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
 				<!-- Version defined in spring-boot-parent pluginManagement section -->
-            </plugin>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>build-info</id>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- Version defined in spring-boot-parent pluginManagement section -->
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -434,6 +581,172 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>${dependency-check-maven.version}</version>
+				<configuration>
+					<!-- Assembly analyzer disabled because we don't have any .NET code/dlls -->
+					<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+					<!-- Node and retirejs analyzer disabled, because any js floating around isn't part of the main app -->
+					<nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+
+					<failBuildOnCVSS>0</failBuildOnCVSS>
+					<suppressionFiles>
+						<suppressionFile>${project.basedir}/config/owasp/suppress.xml</suppressionFile>
+					</suppressionFiles>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>${maven-scm-plugin.version}</version>
+			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<!-- Additional quality gates not run by default when executing mvn clean verify, but are run by CI pipeline -->
+			<id>all-quality-gates</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<configuration>
+							<mutationThreshold>100</mutationThreshold>
+							<excludedClasses>
+								<param>com.spt.development.demo.config.**</param>
+								<param>com.spt.development.demo.jms.**</param>
+								<param>com.spt.development.demo.mvc.**</param>
+								<param>com.spt.development.demo.repository.**</param>
+							</excludedClasses>
+						</configuration>
+						<executions>
+							<execution>
+								<id>mutation-testing</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>mutationCoverage</goal>
+								</goals>
+							</execution>
+						</executions>
+						<!-- Version defined in pluginManagement section -->
+					</plugin>
+					<plugin>
+						<artifactId>maven-pmd-plugin</artifactId>
+						<configuration>
+							<includeTests>false</includeTests>
+							<printFailingErrors>true</printFailingErrors>
+							<rulesets>
+								<ruleset>config/pmd/rulesets/spt-default-rules.xml</ruleset>
+								<ruleset>config/pmd/rulesets/spt-main-rules.xml</ruleset>
+							</rulesets>
+						</configuration>
+						<executions>
+							<execution>
+								<id>pmd-main-check</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>pmd-test-check</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>pmd</goal>
+									<goal>check</goal>
+								</goals>
+								<configuration>
+									<targetDirectory>${project.build.directory}/pmdTest/</targetDirectory>
+									<includeTests>true</includeTests>
+									<excludeRoots>
+										<excludeRoot>${basedir}/src/main/java</excludeRoot>
+									</excludeRoots>
+									<rulesets>
+										<ruleset>config/pmd/rulesets/spt-default-rules.xml</ruleset>
+										<ruleset>config/pmd/rulesets/spt-test-rules.xml</ruleset>
+									</rulesets>
+								</configuration>
+							</execution>
+							<execution>
+								<id>cpd-check</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>cpd-check</goal>
+								</goals>
+							</execution>
+						</executions>
+						<!-- Version defined in pluginManagement section -->
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>add-third-party</goal>
+								</goals>
+								<configuration>
+									<failOnBlacklist>true</failOnBlacklist>
+									<licenseMerges>
+										<!-- Aggregate different ways to write acceptable licenses -->
+										<licenseMerge>CC0 1.0 Universal (CC0 1.0) Public Domain Dedication|
+											Public Domain, per Creative Commons CC0|Public Domain
+										</licenseMerge>
+										<licenseMerge>Eclipse Distribution License - v1.0|
+											Eclipse Distribution License - v 1.0
+										</licenseMerge>
+										<licenseMerge>Eclipse Public License - v1.0|
+											Eclipse Public License 1.0|Eclipse Public License - v 1.0|EDL 1.0|EPL 1.0
+										</licenseMerge>
+										<licenseMerge>Eclipse Public License - v2.0|
+											Eclipse Public License 2.0|Eclipse Public License v2.0|EPL 2.0|
+											Eclipse Public License - v 2.0
+										</licenseMerge>
+										<licenseMerge>Mozilla Public License Version 2.0|MPL 2.0</licenseMerge>
+										<licenseMerge>The 2-Clause BSD License|BSD-2-Clause
+										</licenseMerge>
+										<licenseMerge>The 3-Clause BSD License|BSD License 3|BSD-3-Clause
+										</licenseMerge>
+										<licenseMerge>The Apache Software License, Version 2.0|Apache2|
+											Apache-2.0|Apache 2|APL2|Apache 2.0|Apache License, Version 2.0|
+											The Apache License, Version 2.0|Apache Software License - Version 2.0|
+											the Apache License, ASL Version 2.0|ASL 2.0|Apache License 2.0|ASL, version 2
+										</licenseMerge>
+										<licenseMerge>The MIT License|
+											MIT license|The MIT License (MIT)|MIT License|MIT|MIT-style
+										</licenseMerge>
+									</licenseMerges>
+									<includedLicenses>
+										<!-- To get an idea of risk, see - https://www.synopsys.com/blogs/software-security/top-open-source-licenses/ -->
+										<includedLicense>CC0 1.0 Universal (CC0 1.0) Public Domain Dedication</includedLicense>
+										<includedLicense>Eclipse Distribution License - v1.0</includedLicense>
+										<includedLicense>Eclipse Public License - v1.0</includedLicense>
+										<includedLicense>Eclipse Public License - v2.0</includedLicense>
+										<includedLicense>Mozilla Public License Version 2.0</includedLicense>
+										<includedLicense>The 2-Clause BSD License</includedLicense>
+										<includedLicense>The 3-Clause BSD License</includedLicense>
+										<includedLicense>The Apache Software License, Version 2.0</includedLicense>
+										<includedLicense>The MIT License</includedLicense>
+									</includedLicenses>
+								</configuration>
+							</execution>
+						</executions>
+						<!-- Version defined in pluginManagement section -->
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven-jxr-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

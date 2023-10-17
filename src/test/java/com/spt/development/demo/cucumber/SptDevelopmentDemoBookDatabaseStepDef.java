@@ -14,9 +14,7 @@ import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.getBoo
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SptDevelopmentDemoBookDatabaseStepDef {
-
-
-    private interface TestData extends SptDevelopmentDemoStepDef.TestData {
+    private static class TestData extends SptDevelopmentDemoStepDef.TestData {
     }
 
     @Autowired private HttpTestManager httpTestManager;

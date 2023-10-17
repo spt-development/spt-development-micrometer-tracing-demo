@@ -37,35 +37,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SptDevelopmentDemoStepDef {
     private static final Gson GSON = new GsonBuilder().create();
 
-    interface TestData {
-        String TRACE_ID = "709ac6e18ace422d9421b8d93f0c6505";
-        String TRACE_PARENT = String.format("00-%s-1444ca74c3d2133a-01", TRACE_ID);
+    static class TestData {
+        static final String TRACE_ID = "709ac6e18ace422d9421b8d93f0c6505";
+        static final String TRACE_PARENT = String.format("00-%s-1444ca74c3d2133a-01", TRACE_ID);
 
-        interface Resource {
-            String ROOT = "/com/spt/development/demo/cucumber/requests/";
+        static class Resource {
+            static final String ROOT = "/com/spt/development/demo/cucumber/requests/";
         }
 
-        interface Api {
-            String USERNAME = "bob";
-            String PASSWORD = "password123!";
+        static class Api {
+            static final String USERNAME = "bob";
+            static final String PASSWORD = "password123!";
         }
 
-        interface ValidJob {
-            String TITLE = "The Hitchhikers Guide to the Galaxy";
-            String BLURB = "The Hitchhikers Guide to the Galaxy', 'One Thursday lunchtime the Earth gets unexpectedly demolished to make way for a new hyperspace bypass.";
-            String AUTHOR = "Douglas Adams";
-            int RRP = 699;
+        static class ValidJob {
+            static final String TITLE = "The Hitchhikers Guide to the Galaxy";
+            static final String BLURB = "The Hitchhikers Guide to the Galaxy', 'One Thursday lunchtime the Earth gets unexpectedly demolished to make way for a new hyperspace bypass.";
+            static final String AUTHOR = "Douglas Adams";
+            static final int RRP = 699;
 
-            String RESOURCE = Resource.ROOT + "valid-book.json";
+            static final String RESOURCE = Resource.ROOT + "valid-book.json";
         }
 
-        interface UpdatedJob {
-            String TITLE = ValidJob.TITLE + " (updated)";
-            String BLURB = ValidJob.BLURB + " (updated)";
-            String AUTHOR = ValidJob.AUTHOR + " (updated)";
-            int RRP = ValidJob.RRP + 100;
+        static class UpdatedJob {
+            static final String TITLE = ValidJob.TITLE + " (updated)";
+            static final String BLURB = ValidJob.BLURB + " (updated)";
+            static final String AUTHOR = ValidJob.AUTHOR + " (updated)";
+            static final int RRP = ValidJob.RRP + 100;
 
-            String RESOURCE = Resource.ROOT + "updated-book.json";
+            static final String RESOURCE = Resource.ROOT + "updated-book.json";
         }
     }
 
@@ -84,7 +84,7 @@ public class SptDevelopmentDemoStepDef {
     }
 
     private void clearDatabase() {
-        try (final Connection connection = dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             DatabaseTestUtil.clearDatabase(connection);
         }
         catch (SQLException ex) {

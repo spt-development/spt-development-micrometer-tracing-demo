@@ -1,16 +1,24 @@
 package com.spt.development.demo.util;
 
-public interface Constants {
-    interface Auditing {
-        interface Type {
-            String BOOK = "Book";
-            String SECURITY = "Security";
+public final class Constants {
+    private Constants() {}
+
+    public static final class Auditing {
+        private Auditing() {}
+
+        public static class Type {
+            public static final String BOOK = "Book";
+            public static final String SECURITY = "Security";
+
+            private Type() {}
         }
 
-        interface SubType {
-            String CREATED = "CREATED";
-            String UPDATED = "UPDATED";
-            String DELETED = "DELETED";
+        public static final class SubType {
+            public static final String CREATED = "CREATED";
+            public static final String UPDATED = "UPDATED";
+            public static final String DELETED = "DELETED";
+
+            private SubType() {}
         }
     }
 }

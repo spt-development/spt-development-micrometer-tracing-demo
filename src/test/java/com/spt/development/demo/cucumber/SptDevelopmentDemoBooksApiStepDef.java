@@ -27,7 +27,7 @@ public class SptDevelopmentDemoBooksApiStepDef {
 
     private static final String TRACE_PARENT_HEADER = "traceparent";
 
-    private interface TestData extends SptDevelopmentDemoStepDef.TestData {
+    private static class TestData extends SptDevelopmentDemoStepDef.TestData {
     }
 
     @Autowired private HttpTestManager httpTestManager;
