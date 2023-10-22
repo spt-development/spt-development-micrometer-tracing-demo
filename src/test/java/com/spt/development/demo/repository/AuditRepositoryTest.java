@@ -13,23 +13,36 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class AuditRepositoryTest {
-    private interface TestData {
-        String TYPE = "test-type";
-        String SUB_TYPE = "TEST_SUB_TYPE";
-        String CORRELATION_ID = "06696e2a-c587-475f-a6ad-cbe66094f7d5";
-        String ID = "1";
-        String DETAILS = "Test details";
-        String USER_ID = "123";
-        String USERNAME = "tester";
-        String ORIGINATING_IP = "127.0.0.1";
-        String SERVICE_ID = "Test service ID";
-        String SERVICE_VERSION = "v1.0.0";
-        String SERVICE_HOST_NAME = "localhost";
-        OffsetDateTime CREATED = OffsetDateTime.of(2022, 10, 22, 14, 26, 12, 0, ZoneOffset.UTC);
+    private static class TestData {
+        static final String TYPE = "test-type";
+        static final String SUB_TYPE = "TEST_SUB_TYPE";
+        static final String CORRELATION_ID = "06696e2a-c587-475f-a6ad-cbe66094f7d5";
+        static final String ID = "1";
+        static final String DETAILS = "Test details";
+        static final String USER_ID = "123";
+        static final String USERNAME = "tester";
+        static final String ORIGINATING_IP = "127.0.0.1";
+        static final String SERVICE_ID = "Test service ID";
+        static final String SERVICE_VERSION = "v1.0.0";
+        static final String SERVICE_HOST_NAME = "localhost";
+        static final OffsetDateTime CREATED = OffsetDateTime.of(2022, 10, 22, 14, 26, 12, 0, ZoneOffset.UTC);
+    }
+
+    @Test
+    void setJdbcTemplate_nullTemplateWhenSimpleJdbcInsertNotSet_shouldThrowException() {
+        final AuditRepositoryArgs args = new AuditRepositoryArgs();
+        args.simpleJdbcInsert = null;
+
+        final AuditRepository target = createRepository(args);
+
+        assertThatThrownBy(() -> target.setJdbcTemplate(null))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("JDBC Template must be set");
     }
 
     @Test

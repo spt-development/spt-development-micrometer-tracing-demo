@@ -28,7 +28,7 @@ Building locally
 To build the project and run the integration tests, run the following Maven command:
 
 ```shell
-$ mvn clean install
+$ ./mvnw clean install
 ```
 
 Running the demo

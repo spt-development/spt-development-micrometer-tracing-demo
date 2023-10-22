@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Fully Suppressed Rules (all projects) -->
+    <suppress checks="CustomImportOrder" files="." />
+    <suppress checks="OverloadMethodsDeclarationOrder" files="." />
+
+    <!-- Fully Suppressed Rules (non-library projects only) -->
+    <suppress checks="MissingJavadocType" files="." />
+    <suppress checks="MissingJavadocMethod" files="." />
+
+    <!-- Rules Replaced by spt_checks.xml -->
+    <suppress checks="Indentation" files="." />
+    <suppress checks="LineLength" files="." />
+</suppressions>

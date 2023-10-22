@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -35,10 +36,16 @@ public class AuditRepository extends JdbcDaoSupport {
     @Override
     protected void initTemplateConfig() {
         if (simpleJdbcInsert == null) {
-            simpleJdbcInsert = new SimpleJdbcInsert(getJdbcTemplate())
-                    .withSchemaName(SCHEMA)
-                    .withTableName(TABLE)
-                    .usingGeneratedKeyColumns("event_id");
+            final JdbcTemplate jdbcTemplate = getJdbcTemplate();
+
+            if (jdbcTemplate == null) {
+                throw new IllegalStateException("JDBC Template must be set");
+            }
+
+            simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withSchemaName(SCHEMA)
+                .withTableName(TABLE)
+                .usingGeneratedKeyColumns("event_id");
         }
     }
 

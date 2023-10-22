@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import static com.spt.development.demo.util.Constants.Auditing;
 
 @Slf4j
 @Service
+@Immutable
 @Transactional
 @AllArgsConstructor
 public class BookService {

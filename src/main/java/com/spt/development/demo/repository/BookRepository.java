@@ -4,6 +4,7 @@ import com.spt.development.demo.domain.Book;
 import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -36,10 +37,16 @@ public class BookRepository extends JdbcDaoSupport {
     @Override
     protected void initTemplateConfig() {
         if (simpleJdbcInsert == null) {
-            simpleJdbcInsert = new SimpleJdbcInsert(getJdbcTemplate())
-                    .withSchemaName(SCHEMA)
-                    .withTableName(TABLE)
-                    .usingGeneratedKeyColumns("book_id");
+            final JdbcTemplate jdbcTemplate = getJdbcTemplate();
+
+            if (jdbcTemplate == null) {
+                throw new IllegalStateException("JDBC Template must be set");
+            }
+
+            simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withSchemaName(SCHEMA)
+                .withTableName(TABLE)
+                .usingGeneratedKeyColumns("book_id");
         }
     }
 
@@ -51,27 +58,26 @@ public class BookRepository extends JdbcDaoSupport {
     public Optional<Book> read(long id) {
         try {
             return Optional.ofNullable(
-                    getJdbcTemplate().queryForObject(
+                    simpleJdbcInsert.getJdbcTemplate().queryForObject(
                             "SELECT book_id, title, blurb, author, rrp FROM demo.book WHERE book_id = ?",
                             new BookRowMapper(),
                             id
                     )
             );
-        }
-        catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
     }
 
     public List<Book> readAll() {
-        return getJdbcTemplate().query(
+        return simpleJdbcInsert.getJdbcTemplate().query(
                 "SELECT book_id, title, blurb, author, rrp FROM demo.book",
                 new BookRowMapper()
         );
     }
 
     public Optional<Book> update(@NonNull Book book) {
-        final int rows = getJdbcTemplate().update(
+        final int rows = simpleJdbcInsert.getJdbcTemplate().update(
                 "UPDATE demo.book SET title = ?, blurb = ?, author = ?, rrp = ? WHERE book_id = ?",
                 book.getTitle(),
                 book.getBlurb(),
@@ -87,7 +93,7 @@ public class BookRepository extends JdbcDaoSupport {
     }
 
     public void delete(long id) {
-        getJdbcTemplate().update(
+        simpleJdbcInsert.getJdbcTemplate().update(
                 "DELETE FROM demo.book where book_id = ?",
                 id
         );

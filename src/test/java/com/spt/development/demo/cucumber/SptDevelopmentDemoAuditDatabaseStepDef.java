@@ -32,7 +32,7 @@ import static org.springframework.boot.actuate.security.AuthenticationAuditListe
 public class SptDevelopmentDemoAuditDatabaseStepDef {
     private static final Gson GSON = new GsonBuilder().create();
 
-    private interface TestData extends SptDevelopmentDemoStepDef.TestData {
+    private static class TestData extends SptDevelopmentDemoStepDef.TestData {
     }
 
     @Value("${spring.application.name}") private String appName;

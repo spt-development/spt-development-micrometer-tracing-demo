@@ -1,0 +1,1 @@
+* Demo project, version won't be incremented

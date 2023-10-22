@@ -80,8 +80,7 @@ public class AuditEventListener extends AbstractAuditListener {
                                 .build()
                 );
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             LOG.error("Failed to send audit event: {}", event, t);
         }
     }

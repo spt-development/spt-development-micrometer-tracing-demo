@@ -32,7 +32,7 @@ public class AuditConfig {
     static class MicrometerCorrelationIdProvider implements CorrelationIdProvider {
         private final Tracer tracer;
 
-        public MicrometerCorrelationIdProvider(Tracer tracer) {
+        MicrometerCorrelationIdProvider(Tracer tracer) {
             this.tracer = tracer;
         }
 

@@ -1,0 +1,62 @@
+<FindBugsFilter>
+    <!-- There is no recommendation either way any more between static and instance variables:
+         https://www.slf4j.org/faq.html#declared_static, so in general static is fine as is generally the approach
+         people take.
+      -->
+    <Match>
+        <Bug pattern="SLF4J_LOGGER_SHOULD_BE_NON_STATIC" />
+    </Match>
+
+    <!-- Resolved by replacing \r\n through log message config - see application.yml -->
+    <Match>
+        <Bug pattern="CRLF_INJECTION_LOGS" />
+    </Match>
+
+    <!-- Package containing controllers therefore by definition will be flagged as 'Spring Endpoints' -->
+    <Match>
+        <Package name="com.spt.development.demo.mvc.controller" />
+        <Bug pattern="SPRING_ENDPOINT" />
+    </Match>
+
+    <!-- Hardcoded password is fine for a demo project *only* -->
+    <Match>
+        <Class name="com.spt.development.demo.config.SpringSecurityConfig" />
+        <Method name="userDetailsService"/>
+        <Bug pattern="HARD_CODE_PASSWORD" />
+    </Match>
+
+    <!-- Assignment of library spring bean, no workaround to avoid warning -->
+    <Match>
+        <Class name="com.spt.development.demo.auditing.AuditEventListener" />
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+
+    <!-- Assignment of repository that is technically mutable, therefore no sensible workaround to avoid warning -->
+    <Match>
+        <Class name="com.spt.development.demo.jms.AuditListener" />
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+
+    <!-- Assignment of repository that is technically mutable, therefore no sensible workaround to avoid warning -->
+    <Match>
+        <Class name="com.spt.development.demo.service.BookService" />
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+
+    <!-- Assignment of library spring bean, no workaround to avoid warning -->
+    <Match>
+        <Class name="com.spt.development.demo.repository.AuditRepository" />
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+
+    <!-- Assignment of library spring bean, no workaround to avoid warning -->
+    <Match>
+        <Class name="com.spt.development.demo.repository.BookRepository" />
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+</FindBugsFilter>
