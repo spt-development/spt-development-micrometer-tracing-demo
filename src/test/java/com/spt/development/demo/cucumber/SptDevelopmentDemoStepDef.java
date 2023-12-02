@@ -1,8 +1,8 @@
 package com.spt.development.demo.cucumber;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.spt.development.demo.cucumber.config.TestManagerConfig;
 import com.spt.development.demo.cucumber.util.DatabaseTestUtil;
 import com.spt.development.test.integration.HttpTestManager;
