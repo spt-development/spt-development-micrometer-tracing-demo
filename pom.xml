@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.5</version>
+		<version>3.2.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -26,32 +26,31 @@
 		<!-- Dependency versions -->
 		<commons-collections.version>4.4</commons-collections.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<guava.version>32.1.3-jre</guava.version>
-		<spt-development-audit-spring-boot.version>3.1.5</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.1.5</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.2.0</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.2.0</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.0</awaitility.version>
 		<cucumber.version>7.14.0</cucumber.version>
 		<junit-platform.version>1.10.0</junit-platform.version>
-		<spt-development-test.version>3.1.0</spt-development-test.version>
+		<spt-development-test.version>3.1.1</spt-development-test.version>
 
 		<!-- Plugin versions -->
-		<checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
-		<dependency-check-maven.version>8.4.1</dependency-check-maven.version>
+		<checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
+		<dependency-check-maven.version>9.0.2</dependency-check-maven.version>
 		<jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-		<license-maven-plugin.version>2.2.0</license-maven-plugin.version>
-		<maven-jxr-plugin.version>3.3.0</maven-jxr-plugin.version>
-		<maven-pmd-plugin.version>3.21.0</maven-pmd-plugin.version>
+		<license-maven-plugin.version>2.3.0</license-maven-plugin.version>
+		<maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
+		<maven-pmd-plugin.version>3.21.2</maven-pmd-plugin.version>
 		<maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
-		<pitest-maven.version>1.15.1</pitest-maven.version>
-		<spotbugs-plugin.version>4.7.3.6</spotbugs-plugin.version>
+		<pitest-maven.version>1.15.3</pitest-maven.version>
+		<spotbugs-plugin.version>4.8.1.0</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
-		<checkstyle.version>10.12.4</checkstyle.version>
-		<findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
 		<findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
-		<pitest-junit5-plugin.version>1.2.0</pitest-junit5-plugin.version>
+		<findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
+		<checkstyle.version>10.12.5</checkstyle.version>
+		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -67,13 +66,6 @@
 
 			<!-- Dependencies added to avoid dependency convergence errors -->
 			<!-- None -->
-
-			<!-- Dependencies added to resolve security vulnerabilities -->
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -594,6 +586,9 @@
 				<artifactId>dependency-check-maven</artifactId>
 				<version>${dependency-check-maven.version}</version>
 				<configuration>
+					<!-- NVD API Key obtained from  https://nvd.nist.gov/developers/request-an-api-key -->
+					<nvdApiKey>${nvdApiKey}</nvdApiKey>
+
 					<!-- Assembly analyzer disabled because we don't have any .NET code/dlls -->
 					<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
 					<!-- Node and retirejs analyzer disabled, because any js floating around isn't part of the main app -->

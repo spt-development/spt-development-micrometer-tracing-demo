@@ -14,4 +14,4 @@ jobs:
         with:
           website: jdk.java.net
           release: 21
-      - run: ./mvnw clean dependency-check:check -B
+      - run: ./mvnw clean dependency-check:check -DnvdApiKey= -B
