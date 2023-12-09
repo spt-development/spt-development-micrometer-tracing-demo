@@ -12,9 +12,19 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Set up JDK 21
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
           release: 21
-      - run: ./mvnw clean verify -B
+
+      - name: Run Maven
+        run: ./mvnw clean verify -B

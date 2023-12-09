@@ -9,9 +9,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "datetime=$(/bin/date -u "+%Y%m%d%H")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Restore cached Maven dependencies
+        uses: actions/cache/restore@v3
+        with:
+          path: ~/.m2/repository
+          # Using datetime in cache key as OWASP database may change, without the pom changing
+          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.datetime }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ steps.get-date.outputs.datetime }}
+            ${{ runner.os }}-maven-
+
       - name: Set up JDK 21
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
           release: 21
-      - run: ./mvnw clean dependency-check:check -DnvdApiKey= -B
+
+      - name: Run Maven
+        run: ./mvnw clean dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DnvdApiDelay=6000 -B
+
+      # Want the Maven dependencies to be cached even if the build fails as we want the OWASP database cached, regardless of whether vulnerabilities are found or not
+      - name: Cache Maven dependencies
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.datetime }}-${{ hashFiles('**/pom.xml') }}
