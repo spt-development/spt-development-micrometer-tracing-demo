@@ -586,9 +586,6 @@
 				<artifactId>dependency-check-maven</artifactId>
 				<version>${dependency-check-maven.version}</version>
 				<configuration>
-					<!-- NVD API Key obtained from  https://nvd.nist.gov/developers/request-an-api-key -->
-					<nvdApiKey>${nvdApiKey}</nvdApiKey>
-
 					<!-- Assembly analyzer disabled because we don't have any .NET code/dlls -->
 					<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
 					<!-- Node and retirejs analyzer disabled, because any js floating around isn't part of the main app -->
