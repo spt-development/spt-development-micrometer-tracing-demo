@@ -1,6 +1,6 @@
 name: spt-development-micrometer-tracing-demo
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
