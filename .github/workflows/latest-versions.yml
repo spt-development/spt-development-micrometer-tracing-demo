@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK 22
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 21
+          release: 22
 
       - name: Run Maven
         run: ./mvnw clean versions:update-properties scm:check-local-modification -U -B
