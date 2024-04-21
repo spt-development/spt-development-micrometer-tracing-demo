@@ -2,9 +2,9 @@ package com.spt.development.demo.cucumber;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.spt.development.demo.cucumber.config.TestManagerConfig;
 import com.spt.development.demo.cucumber.util.DatabaseTestUtil;
+import com.spt.development.demo.cucumber.util.MapStringObjectTypeToken;
 import com.spt.development.test.integration.HttpTestManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -121,9 +121,5 @@ public class SptDevelopmentDemoStepDef {
                 httpTestManager.getResponseBody(), new MapStringObjectTypeToken().getType()
         );
         return Double.valueOf(book.get("id").toString()).longValue();
-    }
-
-    public static class MapStringObjectTypeToken extends TypeToken<Map<String,Object>> {
-        static final long serialVersionUID = 1L;
     }
 }

@@ -32,7 +32,7 @@ class BookRepositoryTest {
         return repository;
     }
 
-    private static class BookRepositoryArgs {
+    private static final class BookRepositoryArgs {
         DataSource dataSource = Mockito.mock(DataSource.class);
         SimpleJdbcInsert simpleJdbcInsert = Mockito.mock(SimpleJdbcInsert.class);
     }

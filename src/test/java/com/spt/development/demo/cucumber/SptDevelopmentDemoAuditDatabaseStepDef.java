@@ -3,6 +3,7 @@ package com.spt.development.demo.cucumber;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.spt.development.audit.spring.AuditEvent;
+import com.spt.development.demo.cucumber.util.MapStringObjectTypeToken;
 import com.spt.development.test.integration.HttpTestManager;
 import io.cucumber.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.spt.development.demo.config.WebConfig.TRACE_ID_HEADER;
-import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.MapStringObjectTypeToken;
 import static com.spt.development.demo.cucumber.SptDevelopmentDemoStepDef.getBookIdFromResponse;
 import static com.spt.development.demo.util.Constants.Auditing;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,7 @@ import static org.springframework.boot.actuate.security.AuthenticationAuditListe
 public class SptDevelopmentDemoAuditDatabaseStepDef {
     private static final Gson GSON = new GsonBuilder().create();
 
-    private static class TestData extends SptDevelopmentDemoStepDef.TestData {
+    private static final class TestData extends SptDevelopmentDemoStepDef.TestData {
     }
 
     @Value("${spring.application.name}") private String appName;
@@ -109,7 +109,7 @@ public class SptDevelopmentDemoAuditDatabaseStepDef {
         assertThat(auditEvent.getCreated()).isNotNull();
     }
 
-    private static class AuditEventMapper implements RowMapper<AuditEvent> {
+    private static final class AuditEventMapper implements RowMapper<AuditEvent> {
         @Override
         public AuditEvent mapRow(ResultSet rs, int rowNum) throws SQLException {
             return AuditEvent.builder()

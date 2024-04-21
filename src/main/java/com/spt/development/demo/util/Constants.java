@@ -6,7 +6,7 @@ public final class Constants {
     public static final class Auditing {
         private Auditing() {}
 
-        public static class Type {
+        public static final class Type {
             public static final String BOOK = "Book";
             public static final String SECURITY = "Security";
 
