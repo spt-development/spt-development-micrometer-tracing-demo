@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 class BookTest {
-    private static class TestData {
+    private static final class TestData {
         static final Long ID = 1L;
         static final String TITLE = "The Hitchhikers Guide to the Galaxy";
         static final String BLURB = "The Hitchhikers Guide to the Galaxy', 'One Thursday lunchtime the Earth gets unexpectedly demolished to make way for a new hyperspace bypass.";

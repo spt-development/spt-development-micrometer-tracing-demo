@@ -19,7 +19,11 @@
     <rule ref="category/java/bestpractices.xml/DoubleBraceInitialization" />
     <rule ref="category/java/bestpractices.xml/ForLoopCanBeForeach" />
     <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons" />
-    <rule ref="category/java/bestpractices.xml/LooseCoupling" />
+    <rule ref="category/java/bestpractices.xml/LooseCoupling">
+        <properties>
+            <property name="allowedTypes" value="org.springframework.core.annotation.AnnotationAttributes" />
+        </properties>
+    </rule>
     <rule ref="category/java/bestpractices.xml/MethodReturnsInternalArray" />
     <rule ref="category/java/bestpractices.xml/MissingOverride" />
     <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine" />
@@ -101,7 +105,7 @@
     <rule ref="category/java/design.xml/SwitchDensity" />
     <rule ref="category/java/design.xml/UseUtilityClass">
         <properties>
-            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration/preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='SpringBootApplication']" />
+            <property name="violationSuppressXPath" value=".[pmd-java:hasAnnotation('org.springframework.boot.autoconfigure.SpringBootApplication')]" />
         </properties>
     </rule>
     <rule ref="category/java/design.xml/UselessOverridingMethod" />

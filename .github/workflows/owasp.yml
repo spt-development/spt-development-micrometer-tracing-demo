@@ -16,7 +16,7 @@ jobs:
         shell: bash
 
       - name: Restore cached Maven dependencies
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
           # Using datetime in cache key as OWASP database may change, without the pom changing
@@ -36,7 +36,7 @@ jobs:
 
       # Want the Maven dependencies to be cached even if the build fails as we want the OWASP database cached, regardless of whether vulnerabilities are found or not
       - name: Cache Maven dependencies
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         if: always()
         with:
           path: ~/.m2/repository
