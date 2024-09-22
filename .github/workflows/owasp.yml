@@ -25,11 +25,11 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.get-date.outputs.datetime }}
             ${{ runner.os }}-maven-
 
-      - name: Set up JDK 22
+      - name: Set up JDK 23
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 22
+          release: 23
 
       - name: Run Maven
         run: ./mvnw clean dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DnvdApiDelay=6000 -B

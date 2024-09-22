@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.3</version>
+		<version>3.3.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -33,14 +33,14 @@
 		<commons-collections.version>4.4</commons-collections.version>
 		<commons-logging.version>1.3.4</commons-logging.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.3.3</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.3.3</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.3.4</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.3.4</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.2</awaitility.version>
-		<cucumber.version>7.18.1</cucumber.version>
+		<cucumber.version>7.19.0</cucumber.version>
 		<junit-platform.version>1.11.0</junit-platform.version>
-		<spt-development-test.version>3.1.10</spt-development-test.version>
+		<spt-development-test.version>3.1.11</spt-development-test.version>
 
 		<!-- Spring Boot overrides to fix security vulnerabilities -->
 		<artemis.version>2.37.0</artemis.version>
@@ -53,8 +53,8 @@
 		<maven-jxr-plugin.version>3.5.0</maven-jxr-plugin.version>
 		<maven-pmd-plugin.version>3.25.0</maven-pmd-plugin.version>
 		<maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
-		<pitest-maven.version>1.16.3</pitest-maven.version>
-		<spotbugs-plugin.version>4.8.6.3</spotbugs-plugin.version>
+		<pitest-maven.version>1.17.0</pitest-maven.version>
+		<spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
 		<checkstyle.version>10.18.1</checkstyle.version>
@@ -311,6 +311,7 @@
 					<target>${maven.compiler.target}</target>
 					<showWarnings>true</showWarnings>
 					<compilerArgs>
+						<arg>-proc:full</arg>
 						<arg>-Xlint:all</arg>
 						<arg>-Xlint:-processing</arg>
 						<arg>-Werror</arg>
