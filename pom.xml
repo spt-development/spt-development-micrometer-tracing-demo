@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -33,14 +33,14 @@
 		<commons-collections.version>4.4</commons-collections.version>
 		<commons-logging.version>1.3.4</commons-logging.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.3.5</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.3.5</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.4.0</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.4.0</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.2</awaitility.version>
 		<cucumber.version>7.20.1</cucumber.version>
 		<junit-platform.version>1.11.3</junit-platform.version>
-		<spt-development-test.version>3.1.12</spt-development-test.version>
+		<spt-development-test.version>3.1.13</spt-development-test.version>
 
 		<!-- Spring Boot overrides to fix security vulnerabilities -->
 		<artemis.version>2.38.0</artemis.version>
@@ -53,11 +53,11 @@
 		<maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
 		<maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
 		<maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
-		<pitest-maven.version>1.17.0</pitest-maven.version>
-		<spotbugs-plugin.version>4.8.6.5</spotbugs-plugin.version>
+		<pitest-maven.version>1.17.1</pitest-maven.version>
+		<spotbugs-plugin.version>4.8.6.6</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
-		<checkstyle.version>10.20.0</checkstyle.version>
+		<checkstyle.version>10.20.1</checkstyle.version>
 		<findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
 		<findbugs-sec-bug-pattern.version>1.13.0</findbugs-sec-bug-pattern.version>
 		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
@@ -348,6 +348,12 @@
 							<ignoredUsedUndeclaredDependencies>:::</ignoredUsedUndeclaredDependencies>
 						</configuration>
 					</execution>
+					<!-- Required for Mockito as of JDK 21 - see `maven-surefire-plugin` configuration for more information. -->
+					<execution>
+						<goals>
+							<goal>properties</goal>
+						</goals>
+					</execution>
 				</executions>
 				<!-- Version defined in spring-boot-parent pluginManagement section -->
 			</plugin>
@@ -431,8 +437,17 @@
 						WARNING: Dynamic loading of agents will be disallowed by default in a future release
 
 						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
-					 -->
-					<argLine>-XX:+EnableDynamicAgentLoading ${argLine}</argLine>
+
+                        Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM. As a result, the inline-mock-maker might not be
+                        able to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
+
+                        To explicitly attach Mockito during test execution, the library's jar file needs to be specified as -javaagent as an argument to the executing JVM with
+
+                        @{argLine} -javaagent:${org.mockito:mockito-core:jar}
+
+                        Additionally, the `properties` goal of the `maven-dependency-plugin` must be executed.
+                     -->
+					<argLine>-XX:+EnableDynamicAgentLoading @{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
 					<!--
                          classesDirectory is required to work around a bug that is discussed at
                          https://github.com/spring-projects/spring-boot/issues/6254. There are a number of different
@@ -470,8 +485,17 @@
 						WARNING: Dynamic loading of agents will be disallowed by default in a future release
 
 						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
-					 -->
-					<argLine>-XX:+EnableDynamicAgentLoading ${argLine}</argLine>
+
+                        Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM. As a result, the inline-mock-maker might not be
+                        able to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
+
+                        To explicitly attach Mockito during test execution, the library's jar file needs to be specified as -javaagent as an argument to the executing JVM with
+
+                        @{argLine} -javaagent:${org.mockito:mockito-core:jar}
+
+                        Additionally, the `properties` goal of the `maven-dependency-plugin` must be executed.
+                     -->
+					<argLine>-XX:+EnableDynamicAgentLoading @{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
 					<trimStackTrace>false</trimStackTrace>
 					<includes>
 						<include>**/*Test.java</include>
@@ -487,6 +511,23 @@
 				<artifactId>spotbugs-maven-plugin</artifactId>
 				<version>${spotbugs-plugin.version}</version>
 				<dependencies>
+					<!--
+                         Added slf4j dependencies to resolve warning:
+
+                         SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+                         ...
+                      -->
+					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+						<version>${slf4j.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+						<version>${slf4j.version}</version>
+					</dependency>
+
 					<!-- Included as dependencies as well as plugins so that versions plugins picks up new versions -->
 					<dependency>
 						<groupId>jp.skypencil.findbugs.slf4j</groupId>
