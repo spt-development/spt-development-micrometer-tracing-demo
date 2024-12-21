@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.4.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -33,35 +33,35 @@
 		<commons-collections.version>4.4</commons-collections.version>
 		<commons-logging.version>1.3.4</commons-logging.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.4.0</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.4.0</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.4.1</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.4.1</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.2.2</awaitility.version>
 		<cucumber.version>7.20.1</cucumber.version>
-		<junit-platform.version>1.11.3</junit-platform.version>
-		<spt-development-test.version>3.1.13</spt-development-test.version>
+		<junit-platform.version>1.11.4</junit-platform.version>
+		<spt-development-test.version>3.1.14</spt-development-test.version>
 
 		<!-- Spring Boot overrides to fix security vulnerabilities -->
-		<artemis.version>2.38.0</artemis.version>
+		<artemis.version>2.39.0</artemis.version>
 
 		<!-- Plugin versions -->
 		<checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
-		<dependency-check-maven.version>11.1.0</dependency-check-maven.version>
+		<dependency-check-maven.version>11.1.1</dependency-check-maven.version>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-		<license-maven-plugin.version>2.4.0</license-maven-plugin.version>
+		<license-maven-plugin.version>2.5.0</license-maven-plugin.version>
 		<maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
 		<maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
 		<maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
-		<pitest-maven.version>1.17.1</pitest-maven.version>
+		<pitest-maven.version>1.17.3</pitest-maven.version>
 		<spotbugs-plugin.version>4.8.6.6</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
-		<checkstyle.version>10.20.1</checkstyle.version>
+		<checkstyle.version>10.21.0</checkstyle.version>
 		<findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
 		<findbugs-sec-bug-pattern.version>1.13.0</findbugs-sec-bug-pattern.version>
 		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-		<pmd.version>7.7.0</pmd.version>
+		<pmd.version>7.8.0</pmd.version>
 	</properties>
 
 	<dependencyManagement>
@@ -429,15 +429,6 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
 					<!--
-						Prevents the following warning introduced in JDK 21, caused by Mockito or more specifically byte-buddy-agent:
-
-						WARNING: A Java agent has been loaded dynamically (/Users/khm/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.5/byte-buddy-agent-1.14.5.jar)
-						WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
-						WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
-						WARNING: Dynamic loading of agents will be disallowed by default in a future release
-
-						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
-
                         Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM. As a result, the inline-mock-maker might not be
                         able to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
 
@@ -446,8 +437,10 @@
                         @{argLine} -javaagent:${org.mockito:mockito-core:jar}
 
                         Additionally, the `properties` goal of the `maven-dependency-plugin` must be executed.
+
+						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
                      -->
-					<argLine>-XX:+EnableDynamicAgentLoading @{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+					<argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
 					<!--
                          classesDirectory is required to work around a bug that is discussed at
                          https://github.com/spring-projects/spring-boot/issues/6254. There are a number of different
@@ -477,14 +470,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<!--
-						Prevents the following warning introduced in JDK 21, caused by Mockito or more specifically byte-buddy-agent:
-
-						WARNING: A Java agent has been loaded dynamically (/Users/khm/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.5/byte-buddy-agent-1.14.5.jar)
-						WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
-						WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
-						WARNING: Dynamic loading of agents will be disallowed by default in a future release
-
-						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
 
                         Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM. As a result, the inline-mock-maker might not be
                         able to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
@@ -494,8 +479,10 @@
                         @{argLine} -javaagent:${org.mockito:mockito-core:jar}
 
                         Additionally, the `properties` goal of the `maven-dependency-plugin` must be executed.
+
+						NOTE. argLine property is set by JaCoCo in prepare-agent stage.
                      -->
-					<argLine>-XX:+EnableDynamicAgentLoading @{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+					<argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
 					<trimStackTrace>false</trimStackTrace>
 					<includes>
 						<include>**/*Test.java</include>
