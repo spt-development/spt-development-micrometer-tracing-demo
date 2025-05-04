@@ -2,11 +2,8 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <logger name="org.springframework" level="INFO"/>
-
     <!-- Added specific log-level for CglibAopProxy to hide warnings that appear as a result of enabling DaoSupport logging -->
     <logger name="org.springframework.aop.framework.CglibAopProxy" level="ERROR" />
-    <logger name="com.spt.development.demo" level="TRACE" />
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
