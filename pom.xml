@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.5.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -32,14 +32,14 @@
 		<!-- Dependency versions -->
 		<commons-collections.version>4.5.0</commons-collections.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-		<spt-development-audit-spring-boot.version>3.4.5</spt-development-audit-spring-boot.version>
-		<spt-development-logging-spring-boot.version>3.4.5</spt-development-logging-spring-boot.version>
+		<spt-development-audit-spring-boot.version>3.5.0</spt-development-audit-spring-boot.version>
+		<spt-development-logging-spring-boot.version>3.5.0</spt-development-logging-spring-boot.version>
 
 		<!-- Test dependency versions -->
 		<awaitility.version>4.3.0</awaitility.version>
-		<cucumber.version>7.22.1</cucumber.version>
+		<cucumber.version>7.22.2</cucumber.version>
 		<junit-platform.version>1.12.2</junit-platform.version>
-		<spt-development-test.version>3.1.17</spt-development-test.version>
+		<spt-development-test.version>3.1.18</spt-development-test.version>
 
 		<!-- Spring Boot overrides to fix security vulnerabilities -->
 		<artemis.version>2.41.0</artemis.version>
@@ -52,14 +52,14 @@
 		<maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
 		<maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
 		<maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
-		<pitest-maven.version>1.19.1</pitest-maven.version>
+		<pitest-maven.version>1.19.4</pitest-maven.version>
 		<spotbugs-plugin.version>4.9.3.0</spotbugs-plugin.version>
 
 		<!-- Plugin dependencies -->
-		<checkstyle.version>10.23.1</checkstyle.version>
+		<checkstyle.version>10.24.0</checkstyle.version>
 		<findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
 		<findbugs-sec-bug-pattern.version>1.14.0</findbugs-sec-bug-pattern.version>
-		<pitest-junit5-plugin.version>1.2.2</pitest-junit5-plugin.version>
+		<pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 		<pmd.version>7.13.0</pmd.version>
 	</properties>
 
